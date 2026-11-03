@@ -2,6 +2,13 @@
 
 Aplicación para la gestión integral del entrenamiento de porteros.
 
+> **Nota del fork (Izanco7):** el módulo de Sesiones (listado, crear, detalle con tareas, editar y asistencia) ya existe con páginas, API y modelos de datos —igual que los módulos de Equipos, Porteros, Tareas, Estadísticas, Penaltis y Análisis de Partido—. Este fork añade `lib/db/seed-cimino.js`, un seed que crea el equipo "Cimino Academy" con sus 4 porteros:
+>
+> ```bash
+> node lib/db/seed-cimino.js --email=tucorreo@ejemplo.com
+> # o bien: npm run db:seed-cimino -- --email=tucorreo@ejemplo.com
+> ```
+
 ## Características Implementadas
 
 ### ✅ Módulo de Login
@@ -71,9 +78,6 @@ goalkeeper-training-app/
 │   │   ├── login/          # Página de login
 │   │   ├── dashboard/      # Dashboard principal
 │   │   └── layout.tsx      # Layout con providers
-│   ├── globals.css         # Estilos globales
-│   ├── layout.tsx          # Layout raíz
-│   └── page.tsx            # Redirección inicial
 ├── components/
 │   ├── ui/                 # Componentes UI reutilizables
 │   │   ├── Button.tsx

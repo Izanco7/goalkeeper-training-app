@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "db:init": "node lib/db/init-db.js",
+    "db:seed-cimino": "node lib/db/seed-cimino.js",
     "db:setup": "echo Asegurate de tener MySQL corriendo y configurado en .env.local && npm run db:init"
   },
   "dependencies": {
