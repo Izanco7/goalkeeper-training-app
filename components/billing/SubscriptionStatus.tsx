@@ -1,10 +1,11 @@
 'use client';
 
-import { 
-  CheckCircleIcon, 
+import {
+  CheckCircleIcon,
   ExclamationCircleIcon,
+  ExclamationTriangleIcon,
   ClockIcon,
-  XCircleIcon 
+  XCircleIcon
 } from '@heroicons/react/24/solid';
 
 interface SubscriptionStatusProps {
@@ -64,41 +65,36 @@ export function SubscriptionStatus({
       case 'active':
         return {
           icon: CheckCircleIcon,
-          color: 'text-green-500',
-          bgColor: 'bg-green-50',
-          borderColor: 'border-green-200',
+          iconColor: 'text-lime-400',
+          badge: 'bg-lime-400/15 text-lime-300 border-lime-400/30',
           label: t.active,
         };
       case 'trialing':
         return {
           icon: ClockIcon,
-          color: 'text-blue-500',
-          bgColor: 'bg-blue-50',
-          borderColor: 'border-blue-200',
+          iconColor: 'text-sky-400',
+          badge: 'bg-sky-400/15 text-sky-300 border-sky-400/30',
           label: t.trialing,
         };
       case 'past_due':
         return {
           icon: ExclamationCircleIcon,
-          color: 'text-yellow-500',
-          bgColor: 'bg-yellow-50',
-          borderColor: 'border-yellow-200',
+          iconColor: 'text-amber-400',
+          badge: 'bg-amber-400/15 text-amber-300 border-amber-400/30',
           label: t.past_due,
         };
       case 'cancelled':
         return {
           icon: XCircleIcon,
-          color: 'text-red-500',
-          bgColor: 'bg-red-50',
-          borderColor: 'border-red-200',
+          iconColor: 'text-red-400',
+          badge: 'bg-red-500/15 text-red-300 border-red-500/30',
           label: t.cancelled,
         };
       default:
         return {
           icon: XCircleIcon,
-          color: 'text-gray-500',
-          bgColor: 'bg-gray-50',
-          borderColor: 'border-gray-200',
+          iconColor: 'text-white/40',
+          badge: 'bg-white/10 text-white/50 border-white/10',
           label: t.inactive,
         };
     }
@@ -117,35 +113,36 @@ export function SubscriptionStatus({
   const Icon = config.icon;
 
   return (
-    <div className={`rounded-xl border ${config.borderColor} ${config.bgColor} p-6`}>
+    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
       <div className="flex items-start gap-4">
-        <Icon className={`h-10 w-10 ${config.color} shrink-0`} />
-        
+        <Icon className={`h-10 w-10 ${config.iconColor} shrink-0`} />
+
         <div className="flex-1">
           <div className="flex items-center gap-3">
-            <h3 className="text-xl font-bold text-gray-900">{planName}</h3>
-            <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${config.bgColor} ${config.color} border ${config.borderColor}`}>
+            <h3 className="text-xl font-black tracking-tight text-white">{planName}</h3>
+            <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold border ${config.badge}`}>
               {config.label}
             </span>
           </div>
 
-          <p className="mt-1 text-sm text-gray-600">
+          <p className="mt-1 text-sm text-white/50">
             {t[billingCycle as keyof typeof t]}
           </p>
 
           {currentPeriodEnd && (
-            <p className="mt-3 text-sm text-gray-700">
+            <p className="mt-3 text-sm text-white/70">
               {cancelAtPeriodEnd ? (
-                <span className="text-orange-600 font-medium">
-                  ⚠️ {t.willCancel}: {formatDate(currentPeriodEnd)}
+                <span className="text-amber-300 font-bold inline-flex items-center gap-1.5">
+                  <ExclamationTriangleIcon className="h-4 w-4 text-amber-400 shrink-0" />
+                  {t.willCancel}: {formatDate(currentPeriodEnd)}
                 </span>
               ) : status === 'trialing' ? (
                 <>
-                  {t.trialEndsOn}: <span className="font-medium">{formatDate(currentPeriodEnd)}</span>
+                  {t.trialEndsOn}: <span className="font-bold text-white">{formatDate(currentPeriodEnd)}</span>
                 </>
               ) : (
                 <>
-                  {t.renewsOn}: <span className="font-medium">{formatDate(currentPeriodEnd)}</span>
+                  {t.renewsOn}: <span className="font-bold text-white">{formatDate(currentPeriodEnd)}</span>
                 </>
               )}
             </p>
@@ -153,7 +150,7 @@ export function SubscriptionStatus({
 
           {status === 'past_due' && (
             <div className="mt-4">
-              <button className="text-sm font-medium text-yellow-700 hover:text-yellow-800 underline">
+              <button className="text-sm font-bold text-lime-300 hover:text-lime-200 underline">
                 {t.updatePayment}
               </button>
             </div>

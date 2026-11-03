@@ -64,41 +64,41 @@ export function PlanFeatures({ locale = 'es' }: PlanFeaturesProps) {
   const renderValue = (value: boolean | string) => {
     if (typeof value === 'boolean') {
       return value ? (
-        <CheckIcon className="mx-auto h-5 w-5 text-green-500" />
+        <CheckIcon className="mx-auto h-5 w-5 text-lime-400" />
       ) : (
-        <XMarkIcon className="mx-auto h-5 w-5 text-gray-300" />
+        <XMarkIcon className="mx-auto h-5 w-5 text-white/20" />
       );
     }
-    return <span className="text-gray-900 font-medium">{value}</span>;
+    return <span className="text-white font-bold">{value}</span>;
   };
 
   return (
     <div className="mx-auto max-w-5xl">
       <div className="text-center mb-10">
-        <h2 className="text-2xl font-bold text-gray-900">{t.title}</h2>
-        <p className="mt-2 text-gray-600">{t.subtitle}</p>
+        <h2 className="text-2xl font-black tracking-tight text-white">{t.title}</h2>
+        <p className="mt-2 text-white/50">{t.subtitle}</p>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
         {/* Header */}
-        <div className="grid grid-cols-4 border-b border-gray-200 bg-gray-50">
+        <div className="grid grid-cols-4 border-b border-white/10">
           <div className="p-4"></div>
-          <div className="p-4 text-center font-semibold text-gray-700">{t.free}</div>
-          <div className="p-4 text-center font-semibold text-blue-600 bg-blue-50">{t.pro}</div>
-          <div className="p-4 text-center font-semibold text-gray-700">{t.elite}</div>
+          <div className="p-4 text-center font-bold text-white/60">{t.free}</div>
+          <div className="p-4 text-center font-black text-lime-300 bg-lime-400/[0.06]">{t.pro}</div>
+          <div className="p-4 text-center font-bold text-white/60">{t.elite}</div>
         </div>
 
         {/* Features */}
         {t.features.map((feature, index) => (
           <div
             key={index}
-            className={`grid grid-cols-4 border-b border-gray-100 ${
-              index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
+            className={`grid grid-cols-4 border-b border-white/5 last:border-b-0 ${
+              index % 2 === 0 ? '' : 'bg-white/[0.02]'
             }`}
           >
-            <div className="p-4 text-sm text-gray-700">{feature.name}</div>
+            <div className="p-4 text-sm text-white/80">{feature.name}</div>
             <div className="p-4 text-center text-sm">{renderValue(feature.free)}</div>
-            <div className="p-4 text-center text-sm bg-blue-50/50">{renderValue(feature.pro)}</div>
+            <div className="p-4 text-center text-sm bg-lime-400/[0.06]">{renderValue(feature.pro)}</div>
             <div className="p-4 text-center text-sm">{renderValue(feature.elite)}</div>
           </div>
         ))}

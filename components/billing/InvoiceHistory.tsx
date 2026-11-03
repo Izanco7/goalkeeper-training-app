@@ -75,18 +75,18 @@ export function InvoiceHistory({ invoices, locale = 'es' }: InvoiceHistoryProps)
   };
 
   const getStatusBadge = (status: string) => {
-    const statusConfig: Record<string, { bg: string; text: string; label: string }> = {
-      paid: { bg: 'bg-green-100', text: 'text-green-700', label: t.paid },
-      open: { bg: 'bg-yellow-100', text: 'text-yellow-700', label: t.open },
-      void: { bg: 'bg-gray-100', text: 'text-gray-700', label: t.void },
-      uncollectible: { bg: 'bg-red-100', text: 'text-red-700', label: t.uncollectible },
-      draft: { bg: 'bg-gray-100', text: 'text-gray-600', label: t.draft },
+    const statusConfig: Record<string, { classes: string; label: string }> = {
+      paid: { classes: 'bg-lime-400/15 text-lime-300 border-lime-400/30', label: t.paid },
+      open: { classes: 'bg-amber-400/15 text-amber-300 border-amber-400/30', label: t.open },
+      void: { classes: 'bg-white/10 text-white/50 border-white/10', label: t.void },
+      uncollectible: { classes: 'bg-red-500/15 text-red-300 border-red-500/30', label: t.uncollectible },
+      draft: { classes: 'bg-white/10 text-white/50 border-white/10', label: t.draft },
     };
 
     const config = statusConfig[status] || statusConfig.draft;
 
     return (
-      <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${config.bg} ${config.text}`}>
+      <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium border ${config.classes}`}>
         {config.label}
       </span>
     );
@@ -94,44 +94,44 @@ export function InvoiceHistory({ invoices, locale = 'es' }: InvoiceHistoryProps)
 
   if (!invoices || invoices.length === 0) {
     return (
-      <div className="rounded-xl border border-gray-200 bg-white p-8 text-center">
-        <DocumentTextIcon className="mx-auto h-12 w-12 text-gray-400" />
-        <p className="mt-4 text-gray-500">{t.noInvoices}</p>
+      <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-8 text-center">
+        <DocumentTextIcon className="mx-auto h-12 w-12 text-white/30" />
+        <p className="mt-4 text-white/50">{t.noInvoices}</p>
       </div>
     );
   }
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-200">
-        <h3 className="text-lg font-semibold text-gray-900">{t.title}</h3>
+    <div className="rounded-2xl border border-white/10 bg-white/[0.03] overflow-hidden">
+      <div className="px-6 py-4 border-b border-white/10">
+        <h3 className="text-lg font-black tracking-tight text-white">{t.title}</h3>
       </div>
 
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full">
+          <thead>
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-white/40 uppercase tracking-widest">
                 {t.date}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-white/40 uppercase tracking-widest">
                 {t.amount}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-white/40 uppercase tracking-widest">
                 {t.status}
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-right text-xs font-medium text-white/40 uppercase tracking-widest">
                 {t.actions}
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="divide-y divide-white/5">
             {invoices.map((invoice) => (
-              <tr key={invoice.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <tr key={invoice.id} className="hover:bg-white/[0.04] transition-colors">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-white/80">
                   {formatDate(invoice.paid_at || invoice.created_at)}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-white">
                   {formatAmount(invoice.amount, invoice.currency)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
@@ -144,7 +144,7 @@ export function InvoiceHistory({ invoices, locale = 'es' }: InvoiceHistoryProps)
                         href={invoice.hosted_invoice_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-600 hover:text-blue-800 font-medium inline-flex items-center gap-1"
+                        className="text-lime-300 hover:text-lime-200 font-bold inline-flex items-center gap-1 transition-colors"
                       >
                         <DocumentTextIcon className="h-4 w-4" />
                         {t.view}
@@ -155,7 +155,7 @@ export function InvoiceHistory({ invoices, locale = 'es' }: InvoiceHistoryProps)
                         href={invoice.invoice_pdf}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-gray-600 hover:text-gray-800 font-medium inline-flex items-center gap-1"
+                        className="text-white/60 hover:text-white font-bold inline-flex items-center gap-1 transition-colors"
                       >
                         <ArrowDownTrayIcon className="h-4 w-4" />
                         {t.download}

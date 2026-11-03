@@ -27,10 +27,10 @@ export function DiagramModal({ designId, title, onClose }: DiagramModalProps) {
       title={title}
       size="xl"
     >
-      <div className="w-full h-full p-4">
+      <div className="w-full h-full p-2 sm:p-4">
         <DesignPreview 
           designId={designId} 
-          className="w-full max-w-6xl mx-auto rounded-lg border" 
+          className="w-full max-w-6xl mx-auto rounded-xl border border-white/10" 
         />
       </div>
     </Modal>

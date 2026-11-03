@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { useParams, useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import { MapIcon } from '@heroicons/react/24/outline';
 
 interface TaskCardProps {
   task: {
@@ -22,22 +23,22 @@ interface TaskCardProps {
 
 const getCategoryColor = (category: string): string => {
   const colors: Record<string, string> = {
-    technical: 'bg-blue-100 text-blue-800',
-    tactical: 'bg-purple-100 text-purple-800',
-    physical: 'bg-green-100 text-green-800',
-    psychological: 'bg-yellow-100 text-yellow-800',
-    goalkeeper_specific: 'bg-red-100 text-red-800'
+    technical: 'bg-sky-400/15 text-sky-300 border-sky-400/30',
+    tactical: 'bg-violet-400/15 text-violet-300 border-violet-400/30',
+    physical: 'bg-lime-400/15 text-lime-300 border-lime-400/30',
+    psychological: 'bg-amber-400/15 text-amber-300 border-amber-400/30',
+    goalkeeper_specific: 'bg-red-400/15 text-red-300 border-red-400/30'
   };
-  return colors[category] || 'bg-gray-100 text-gray-800';
+  return colors[category] || 'bg-white/10 text-white/60 border-white/10';
 };
 
 const getDifficultyColor = (difficulty: string): string => {
   const colors: Record<string, string> = {
-    beginner: 'bg-green-500',
-    intermediate: 'bg-yellow-500',
-    advanced: 'bg-red-500'
+    beginner: 'bg-lime-400',
+    intermediate: 'bg-amber-400',
+    advanced: 'bg-red-400'
   };
-  return colors[difficulty] || 'bg-gray-500';
+  return colors[difficulty] || 'bg-white/30';
 };
 
 export function TaskCard({ task, onDelete }: TaskCardProps) {
@@ -55,61 +56,59 @@ export function TaskCard({ task, onDelete }: TaskCardProps) {
   };
 
   return (
-    <Card className="hover:shadow-lg transition-shadow">
+    <Card className="hover:border-lime-400/40 transition-all">
       <div className="flex flex-col h-full">
-        <div className="flex items-start justify-between mb-3">
+        <div className="flex items-start justify-between gap-2 mb-3">
           <div className="flex-1">
-            <h3 className="text-lg font-semibold text-gray-900 mb-1">
+            <h3 className="text-lg font-extrabold text-white tracking-tight mb-1">
               {task.title}
             </h3>
             {task.subcategory && (
-              <p className="text-sm text-gray-500">{task.subcategory}</p>
+              <p className="text-sm text-white/50">{task.subcategory}</p>
             )}
           </div>
           {task.is_public && (
-            <span className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded">
+            <span className="text-xs font-bold bg-blue-400/15 text-blue-300 border border-blue-400/30 px-2 py-1 rounded-full whitespace-nowrap">
               {t('publicTasks')}
             </span>
           )}
         </div>
 
-        <div className="flex items-center gap-2 mb-3">
+        <div className="flex items-center gap-2 mb-3 flex-wrap">
           <span
-            className={`text-xs px-2 py-1 rounded-full font-medium ${getCategoryColor(
+            className={`text-xs px-2.5 py-1 rounded-full font-bold border ${getCategoryColor(
               task.category
             )}`}
           >
             {t(task.category as any)}
           </span>
           {task.difficulty && (
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1.5">
               <div
                 className={`w-2 h-2 rounded-full ${getDifficultyColor(
                   task.difficulty
                 )}`}
               />
-              <span className="text-xs text-gray-600">
+              <span className="text-xs text-white/60">
                 {t(task.difficulty as any)}
               </span>
             </div>
           )}
           {task.duration && (
-            <span className="text-xs text-gray-600">
+            <span className="text-xs text-white/50">
               {task.duration} {t('minutes')}
             </span>
           )}
           {task.design_id && (
-            <div className="flex items-center gap-1 bg-purple-50 text-purple-700 px-2 py-1 rounded" title={t('hasDiagram')}>
-              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-              </svg>
-              <span className="text-xs font-medium">{t('diagram')}</span>
+            <div className="flex items-center gap-1 bg-violet-400/10 text-violet-300 border border-violet-400/30 px-2 py-1 rounded-full" title={t('hasDiagram')}>
+              <MapIcon className="w-3 h-3" />
+              <span className="text-xs font-bold">{t('diagram')}</span>
             </div>
           )}
         </div>
 
         {task.description && (
-          <p className="text-sm text-gray-600 mb-4 line-clamp-3">
+          <p className="text-sm text-white/60 mb-4 line-clamp-3">
             {task.description}
           </p>
         )}
@@ -125,7 +124,7 @@ export function TaskCard({ task, onDelete }: TaskCardProps) {
             <Button
               variant="outline"
               onClick={() => onDelete(task.id)}
-              className="text-red-600 hover:bg-red-50"
+              className="border-red-500/40 text-red-300 hover:border-red-500/60 hover:bg-red-500/10 hover:text-red-200"
             >
               {t('deleteTask')}
             </Button>

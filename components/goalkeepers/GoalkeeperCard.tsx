@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
+import { UsersIcon, NoSymbolIcon } from '@heroicons/react/24/outline';
 import { GoalkeeperWithTeam } from '@/lib/types/database';
 
 interface GoalkeeperCardProps {
@@ -30,25 +31,25 @@ export function GoalkeeperCard({ goalkeeper, onDelete }: GoalkeeperCardProps) {
   const initials = `${goalkeeper.first_name.charAt(0)}${goalkeeper.last_name.charAt(0)}`.toUpperCase();
 
   return (
-    <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden">
+    <div className="rounded-2xl border border-white/10 bg-white/[0.03] hover:border-lime-400/40 transition-all duration-200 overflow-hidden">
       {/* Header con foto/avatar */}
-      <div className="bg-gradient-to-r from-blue-500 to-blue-700 p-6">
+      <div className="bg-gradient-to-r from-lime-400/15 via-lime-400/5 to-transparent border-b border-white/10 p-6">
         <div className="flex items-center gap-4">
           {goalkeeper.photo ? (
             <img
               src={goalkeeper.photo}
               alt={fullName}
-              className="w-20 h-20 rounded-full border-4 border-white object-cover"
+              className="w-20 h-20 rounded-full border-4 border-white/20 object-cover"
             />
           ) : (
-            <div className="w-20 h-20 rounded-full border-4 border-white bg-blue-300 flex items-center justify-center text-white font-bold text-2xl">
+            <div className="w-20 h-20 rounded-full border-4 border-white/20 bg-lime-400/15 flex items-center justify-center text-lime-300 font-black text-2xl">
               {initials}
             </div>
           )}
-          <div className="flex-1 text-white">
-            <h3 className="text-xl font-bold">{fullName}</h3>
+          <div className="flex-1">
+            <h3 className="text-xl font-extrabold tracking-tight text-white">{fullName}</h3>
             {goalkeeper.jersey_number && (
-              <p className="text-blue-100 text-lg font-semibold">
+              <p className="text-lime-300 text-lg font-extrabold">
                 #{goalkeeper.jersey_number}
               </p>
             )}
@@ -60,20 +61,16 @@ export function GoalkeeperCard({ goalkeeper, onDelete }: GoalkeeperCardProps) {
       <div className="p-6">
         {/* Equipo */}
         {goalkeeper.team_name ? (
-          <div className="mb-4 flex items-center text-sm text-gray-600">
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-            </svg>
-            <span className="font-medium">{goalkeeper.team_name}</span>
+          <div className="mb-4 flex items-center text-sm text-white/60">
+            <UsersIcon className="w-4 h-4 mr-2 text-lime-400" />
+            <span className="font-bold text-white/80">{goalkeeper.team_name}</span>
             {goalkeeper.team_category && (
-              <span className="ml-2 text-gray-500">• {goalkeeper.team_category}</span>
+              <span className="ml-2 text-white/40">• {goalkeeper.team_category}</span>
             )}
           </div>
         ) : (
-          <div className="mb-4 flex items-center text-sm text-gray-400">
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-            </svg>
+          <div className="mb-4 flex items-center text-sm text-white/40">
+            <NoSymbolIcon className="w-4 h-4 mr-2" />
             {t('noTeam')}
           </div>
         )}
@@ -81,21 +78,21 @@ export function GoalkeeperCard({ goalkeeper, onDelete }: GoalkeeperCardProps) {
         {/* Stats Grid */}
         <div className="grid grid-cols-3 gap-3 mb-6">
           {age && (
-            <div className="text-center p-3 bg-gray-50 rounded-lg">
-              <p className="text-xl font-bold text-blue-600">{age}</p>
-              <p className="text-xs text-gray-600 mt-1">{t('years')}</p>
+            <div className="text-center p-3 rounded-xl bg-white/[0.04] border border-white/10">
+              <p className="text-xl font-black text-white">{age}</p>
+              <p className="text-xs text-white/40 mt-1">{t('years')}</p>
             </div>
           )}
           {goalkeeper.height && (
-            <div className="text-center p-3 bg-gray-50 rounded-lg">
-              <p className="text-xl font-bold text-green-600">{goalkeeper.height}</p>
-              <p className="text-xs text-gray-600 mt-1">{t('cm')}</p>
+            <div className="text-center p-3 rounded-xl bg-white/[0.04] border border-white/10">
+              <p className="text-xl font-black text-white">{goalkeeper.height}</p>
+              <p className="text-xs text-white/40 mt-1">{t('cm')}</p>
             </div>
           )}
           {goalkeeper.weight && (
-            <div className="text-center p-3 bg-gray-50 rounded-lg">
-              <p className="text-xl font-bold text-purple-600">{goalkeeper.weight}</p>
-              <p className="text-xs text-gray-600 mt-1">{t('kg')}</p>
+            <div className="text-center p-3 rounded-xl bg-white/[0.04] border border-white/10">
+              <p className="text-xl font-black text-white">{goalkeeper.weight}</p>
+              <p className="text-xs text-white/40 mt-1">{t('kg')}</p>
             </div>
           )}
         </div>
@@ -103,8 +100,8 @@ export function GoalkeeperCard({ goalkeeper, onDelete }: GoalkeeperCardProps) {
         {/* Mano Dominante */}
         {goalkeeper.dominant_hand && (
           <div className="mb-4 flex items-center text-sm">
-            <span className="text-gray-600">{t('dominantHand')}:</span>
-            <span className="ml-2 font-medium text-gray-900">
+            <span className="text-white/50">{t('dominantHand')}:</span>
+            <span className="ml-2 font-bold text-lime-300">
               {goalkeeper.dominant_hand === 'left' && t('leftHand')}
               {goalkeeper.dominant_hand === 'right' && t('rightHand')}
               {goalkeeper.dominant_hand === 'both' && t('bothHands')}
@@ -116,19 +113,19 @@ export function GoalkeeperCard({ goalkeeper, onDelete }: GoalkeeperCardProps) {
         <div className="flex gap-2">
           <Link
             href={`/${locale}/goalkeepers/${goalkeeper.id}`}
-            className="flex-1 text-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+            className="flex-1 text-center px-4 py-2 bg-lime-400 text-black rounded-full hover:bg-lime-300 transition-colors text-sm font-extrabold"
           >
             {tc('view')}
           </Link>
           <Link
             href={`/${locale}/goalkeepers/${goalkeeper.id}/edit`}
-            className="flex-1 text-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium"
+            className="flex-1 text-center px-4 py-2 border border-white/15 text-white/70 rounded-full hover:border-lime-400/50 hover:text-lime-300 transition-colors text-sm font-bold"
           >
             {tc('edit')}
           </Link>
           <button
             onClick={onDelete}
-            className="px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium"
+            className="px-4 py-2 border border-red-500/40 text-red-300 rounded-full hover:bg-red-500/10 transition-colors text-sm font-bold"
           >
             {tc('delete')}
           </button>

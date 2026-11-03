@@ -41,24 +41,24 @@ export default function DesignPreview({ designId, className = '' }: DesignPrevie
 
   if (loading) {
     return (
-      <div className={`flex items-center justify-center bg-gray-100 ${className}`}>
-        <div className="text-gray-500">Cargando diagrama...</div>
+      <div className={`flex items-center justify-center bg-black/40 ${className}`}>
+        <div className="text-white/50">Cargando diagrama...</div>
       </div>
     );
   }
 
   if (error || !design) {
     return (
-      <div className={`flex items-center justify-center bg-gray-100 ${className}`}>
-        <div className="text-gray-500">No se pudo cargar el diagrama</div>
+      <div className={`flex items-center justify-center bg-black/40 ${className}`}>
+        <div className="text-white/50">No se pudo cargar el diagrama</div>
       </div>
     );
   }
 
   if (!design.img) {
     return (
-      <div className={`flex items-center justify-center bg-gray-100 ${className}`}>
-        <div className="text-gray-500">No hay imagen del diagrama</div>
+      <div className={`flex items-center justify-center bg-black/40 ${className}`}>
+        <div className="text-white/50">No hay imagen del diagrama</div>
       </div>
     );
   }
@@ -67,7 +67,7 @@ export default function DesignPreview({ designId, className = '' }: DesignPrevie
     <Image
       src={`/api/designs/${design.img}`}
       alt={design.title || 'Diagrama táctico'}
-      className={`relative ${className} border-2 border-black/70`}
+      className={`relative ${className}`}
       width={1623}                      
       height={1014}
     />    

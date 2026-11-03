@@ -87,18 +87,29 @@ export function PricingCard({
     return t.subscribe;
   };
 
+  const getButtonClasses = () => {
+    const base = 'mt-8 w-full rounded-full py-3 px-4 text-center text-sm font-extrabold transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50';
+    if (isPopular || isCurrentPlan) {
+      return `${base} bg-lime-400 text-black hover:bg-lime-300`;
+    }
+    if (isFree) {
+      return `${base} border border-white/15 text-white/70 hover:border-lime-400/50 hover:text-lime-300`;
+    }
+    return `${base} border border-lime-400/50 text-lime-300 hover:bg-lime-400/10`;
+  };
+
   return (
     <div
-      className={`relative rounded-2xl p-8 ${
+      className={`relative rounded-2xl border p-8 transition-all duration-200 ${
         isPopular
-          ? 'bg-blue-600 text-white ring-4 ring-blue-600 ring-opacity-50 scale-105'
-          : 'bg-white text-gray-900 ring-1 ring-gray-200'
-      } ${isCurrentPlan ? 'ring-2 ring-green-500' : ''} transition-all duration-200 hover:shadow-xl`}
+          ? 'border-lime-400/50 bg-lime-400/[0.04] md:scale-105'
+          : 'border-white/10 bg-white/[0.03]'
+      } hover:border-white/20`}
     >
       {/* Badge Popular */}
       {isPopular && (
         <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-          <span className="inline-flex items-center gap-1 rounded-full bg-yellow-400 px-4 py-1 text-sm font-semibold text-gray-900">
+          <span className="inline-flex items-center gap-1 rounded-full bg-lime-400 px-4 py-1 text-sm font-extrabold text-black">
             <StarIcon className="h-4 w-4" />
             {t.popular}
           </span>
@@ -108,7 +119,7 @@ export function PricingCard({
       {/* Badge Plan Actual */}
       {isCurrentPlan && !isPopular && (
         <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-          <span className="inline-flex items-center gap-1 rounded-full bg-green-500 px-4 py-1 text-sm font-semibold text-white">
+          <span className="inline-flex items-center gap-1 rounded-full bg-lime-400/15 border border-lime-400/30 px-4 py-1 text-sm font-bold text-lime-300">
             <CheckIcon className="h-4 w-4" />
             {t.currentPlan}
           </span>
@@ -117,10 +128,10 @@ export function PricingCard({
 
       {/* Header */}
       <div className="text-center">
-        <h3 className={`text-xl font-bold ${isPopular ? 'text-white' : 'text-gray-900'}`}>
+        <h3 className="text-xl font-black tracking-tight text-white">
           {name}
         </h3>
-        <p className={`mt-2 text-sm ${isPopular ? 'text-blue-100' : 'text-gray-500'}`}>
+        <p className="mt-2 text-sm text-white/50">
           {description}
         </p>
       </div>
@@ -128,11 +139,11 @@ export function PricingCard({
       {/* Precio */}
       <div className="mt-6 text-center">
         <div className="flex items-baseline justify-center gap-1">
-          <span className={`text-5xl font-bold tracking-tight ${isPopular ? 'text-white' : 'text-gray-900'}`}>
+          <span className="text-5xl font-black tracking-tight text-white">
             {isFree ? formatPrice(0) : formatPrice(monthlyEquivalent)}
           </span>
           {!isFree && (
-            <span className={`text-lg ${isPopular ? 'text-blue-100' : 'text-gray-500'}`}>
+            <span className="text-lg text-white/50">
               {t.perMonth}
             </span>
           )}
@@ -140,11 +151,11 @@ export function PricingCard({
 
         {!isFree && billingCycle === 'yearly' && (
           <div className="mt-2 space-y-1">
-            <p className={`text-sm ${isPopular ? 'text-blue-100' : 'text-gray-500'}`}>
+            <p className="text-sm text-white/50">
               {formatPrice(price)} {t.billedYearly}
             </p>
             {savings > 0 && (
-              <span className="inline-flex rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-800">
+              <span className="inline-flex rounded-full bg-lime-400/15 border border-lime-400/30 px-3 py-1 text-xs font-bold text-lime-300">
                 {t.save} {savings}%
               </span>
             )}
@@ -157,11 +168,9 @@ export function PricingCard({
         {features.map((feature, index) => (
           <li key={index} className="flex items-start gap-3">
             <CheckIcon
-              className={`h-5 w-5 shrink-0 ${
-                isPopular ? 'text-blue-200' : 'text-blue-600'
-              }`}
+              className="h-5 w-5 shrink-0 text-lime-400"
             />
-            <span className={`text-sm ${isPopular ? 'text-blue-50' : 'text-gray-600'}`}>
+            <span className="text-sm text-white/70">
               {feature}
             </span>
           </li>
@@ -172,13 +181,7 @@ export function PricingCard({
       <button
         onClick={() => onSelect(slug, billingCycle)}
         disabled={disabled || isLoading}
-        className={`mt-8 w-full rounded-xl py-3 px-4 text-center text-sm font-semibold transition-all duration-200 ${
-          isPopular
-            ? 'bg-white text-blue-600 hover:bg-blue-50 disabled:bg-gray-100'
-            : isFree
-            ? 'bg-gray-100 text-gray-900 hover:bg-gray-200 disabled:bg-gray-50'
-            : 'bg-blue-600 text-white hover:bg-blue-700 disabled:bg-gray-300'
-        } disabled:cursor-not-allowed disabled:opacity-50`}
+        className={getButtonClasses()}
       >
         {isLoading ? (
           <span className="inline-flex items-center gap-2">

@@ -35,20 +35,20 @@ export function UpgradeBanner({ type, resource, feature, current, max }: Upgrade
   const t = texts[locale as keyof typeof texts] || texts.es;
 
   return (
-    <div className="rounded-lg bg-linear-to-r from-amber-50 to-orange-50 border border-amber-200 p-4">
+    <div className="rounded-2xl border border-amber-400/30 bg-amber-400/[0.08] p-4">
       <div className="flex items-start gap-3">
-        <ExclamationTriangleIcon className="h-6 w-6 text-amber-500 shrink-0 mt-0.5" />
+        <ExclamationTriangleIcon className="h-6 w-6 text-amber-400 shrink-0 mt-0.5" />
         <div className="flex-1">
-          <h4 className="font-semibold text-amber-800">
+          <h4 className="font-bold text-white">
             {type === 'limit' ? t.limitTitle : t.featureTitle}
           </h4>
-          <p className="text-sm text-amber-700 mt-1">
+          <p className="text-sm text-white/60 mt-1">
             {type === 'limit' ? t.limitMessage : t.featureMessage}
           </p>
         </div>
         <Link
           href={`/${locale}/pricing`}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors text-sm font-medium shrink-0"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-lime-400 text-black rounded-full hover:bg-lime-300 transition-all text-sm font-extrabold shrink-0"
         >
           <ArrowUpIcon className="h-4 w-4" />
           {t.upgradeButton}
@@ -86,23 +86,23 @@ interface LimitGateProps {
   showBanner?: boolean;
 }
 
-export function LimitGate({ 
-  resource, 
-  canCreate, 
-  current, 
-  max, 
-  children, 
-  showBanner = true 
+export function LimitGate({
+  resource,
+  canCreate,
+  current,
+  max,
+  children,
+  showBanner = true
 }: LimitGateProps) {
   return (
     <>
       {!canCreate && showBanner && (
         <div className="mb-4">
-          <UpgradeBanner 
-            type="limit" 
-            resource={resource} 
-            current={current} 
-            max={max} 
+          <UpgradeBanner
+            type="limit"
+            resource={resource}
+            current={current}
+            max={max}
           />
         </div>
       )}

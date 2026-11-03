@@ -13,36 +13,36 @@ interface StatCardProps {
 }
 
 export default function StatCard({ title, value, subtitle, icon, color = 'blue', trend }: StatCardProps) {
-  const colorClasses = {
-    blue: 'bg-blue-50 text-blue-700 border-blue-200',
-    green: 'bg-green-50 text-green-700 border-green-200',
-    yellow: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-    red: 'bg-red-50 text-red-700 border-red-200',
-    purple: 'bg-purple-50 text-purple-700 border-purple-200',
-    gray: 'bg-gray-50 text-gray-700 border-gray-200'
+  const accentClasses = {
+    blue: 'text-sky-300',
+    green: 'text-lime-300',
+    yellow: 'text-amber-300',
+    red: 'text-red-400',
+    purple: 'text-violet-300',
+    gray: 'text-white/70'
   };
 
   return (
-    <div className={`rounded-lg border-2 p-6 transition-all hover:shadow-md ${colorClasses[color]}`}>
+    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 transition-all hover:border-lime-400/30">
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <p className="text-sm font-medium opacity-80">{title}</p>
-          <p className="mt-2 text-3xl font-bold">{value}</p>
+          <p className="text-sm font-medium text-white/50">{title}</p>
+          <p className="mt-2 text-3xl font-black text-white">{value}</p>
           {subtitle && (
-            <p className="mt-1 text-sm opacity-70">{subtitle}</p>
+            <p className="mt-1 text-sm text-white/40">{subtitle}</p>
           )}
         </div>
         {icon && (
-          <div className="text-4xl opacity-80">{icon}</div>
+          <div className={`text-4xl ${accentClasses[color]}`}>{icon}</div>
         )}
       </div>
-      
+
       {trend && (
         <div className="mt-4 flex items-center gap-2">
-          <span className={`text-sm font-medium ${trend.isPositive ? 'text-green-600' : 'text-red-600'}`}>
+          <span className={`text-sm font-bold ${trend.isPositive ? 'text-lime-300' : 'text-red-400'}`}>
             {trend.isPositive ? '↑' : '↓'} {Math.abs(trend.value)}%
           </span>
-          <span className="text-xs opacity-70">vs temporada anterior</span>
+          <span className="text-xs text-white/40">vs temporada anterior</span>
         </div>
       )}
     </div>
