@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { UserGroupIcon } from '@heroicons/react/24/outline';
 import { TeamCard } from '@/components/teams/TeamCard';
 import { Button } from '@/components/ui/Button';
 import { TeamWithStats } from '@/lib/types/database';
@@ -12,7 +13,7 @@ export default function TeamsPage() {
   const locale = useLocale();
   const t = useTranslations('teams');
   const tc = useTranslations('common');
-  
+
   const [teams, setTeams] = useState<TeamWithStats[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
@@ -21,10 +22,10 @@ export default function TeamsPage() {
   const fetchTeams = useCallback(async () => {
     try {
       setIsLoading(true);
-      const url = filterSeason === 'all' 
+      const url = filterSeason === 'all'
         ? '/api/teams'
         : `/api/teams?season=${filterSeason}`;
-      
+
       const data = await apiGet<{ teams: TeamWithStats[] }>(url);
       setTeams(data.teams || []);
     } catch (err) {
@@ -53,14 +54,14 @@ export default function TeamsPage() {
 
   const seasons = Array.from(new Set(teams.map(t => t.season)));
 
-  return (    
+  return (
     <div>
       {/* Header */}
       <div className="mb-8">
         <div className="flex justify-between items-center mb-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
-            <p className="mt-1 text-gray-600">{t('subtitle')}</p>
+            <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white">{t('title')}</h1>
+            <p className="mt-1 text-white/50">{t('subtitle')}</p>
           </div>
           <Link href={`/${locale}/teams/new`}>
             <Button variant="primary">
@@ -75,11 +76,11 @@ export default function TeamsPage() {
             <select
               value={filterSeason}
               onChange={(e) => setFilterSeason(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="px-4 py-2 bg-white/[0.03] border border-white/10 rounded-full text-white/80 text-sm focus:ring-2 focus:ring-lime-400/40 focus:border-lime-400/50 outline-none cursor-pointer"
             >
-              <option value="all">{tc('all')}</option>
+              <option value="all" className="bg-[#111816]">{tc('all')}</option>
               {seasons.map(season => (
-                <option key={season} value={season}>{season}</option>
+                <option key={season} value={season} className="bg-[#111816]">{season}</option>
               ))}
             </select>
           </div>
@@ -88,34 +89,22 @@ export default function TeamsPage() {
 
       {/* Error */}
       {error && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-sm text-red-800">{error}</p>
+        <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-2xl">
+          <p className="text-sm text-red-300">{error}</p>
         </div>
       )}
 
       {/* Loading */}
       {isLoading ? (
         <div className="flex justify-center items-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-400"></div>
         </div>
       ) : teams.length === 0 ? (
         /* Empty State */
-        <div className="text-center py-12">
-          <svg
-            className="mx-auto h-12 w-12 text-gray-400"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-            />
-          </svg>
-          <h3 className="mt-2 text-sm font-medium text-gray-900">{t('noTeams')}</h3>
-          <p className="mt-1 text-sm text-gray-500">{t('noTeamsDescription')}</p>
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] text-center py-12 px-6">
+          <UserGroupIcon className="mx-auto h-12 w-12 text-white/20" />
+          <h3 className="mt-2 text-base font-bold text-white">{t('noTeams')}</h3>
+          <p className="mt-1 text-sm text-white/50">{t('noTeamsDescription')}</p>
           <div className="mt-6">
             <Link href={`/${locale}/teams/new`}>
               <Button variant="primary">{t('createTeam')}</Button>
@@ -134,6 +123,6 @@ export default function TeamsPage() {
           ))}
         </div>
       )}
-    </div>    
+    </div>
   );
 }

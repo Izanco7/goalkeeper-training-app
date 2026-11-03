@@ -4,7 +4,9 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { apiGet, apiPost } from '@/lib/utils/api';
+import { Input } from '@/components/ui/Input';
 import PenaltyGrid from '@/components/penalties/PenaltyGrid';
 
 interface Goalkeeper {
@@ -12,6 +14,12 @@ interface Goalkeeper {
   first_name: string;
   last_name: string;
 }
+
+const selectClasses =
+  "w-full px-4 py-2.5 bg-black/40 border border-white/10 rounded-xl text-white focus:ring-2 focus:ring-lime-400/30 focus:border-lime-400/60 outline-none transition-all [&_option]:bg-[#101714] [&_option]:text-white";
+const textareaClasses =
+  "w-full px-4 py-2.5 bg-black/40 border border-white/10 rounded-xl text-white placeholder-white/25 focus:ring-2 focus:ring-lime-400/30 focus:border-lime-400/60 outline-none transition-all";
+const labelClasses = "block text-sm font-bold text-white/70 mb-2";
 
 export default function NewPenaltyPage({ params }: { params: Promise<{ locale: string }> }) {
   const [resolvedParams, setResolvedParams] = useState<{ locale: string } | null>(null);
@@ -102,8 +110,8 @@ export default function NewPenaltyPage({ params }: { params: Promise<{ locale: s
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">{tCommon('loading')}</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-400 mx-auto"></div>
+          <p className="mt-4 text-white/50">{tCommon('loading')}</p>
         </div>
       </div>
     );
@@ -115,32 +123,32 @@ export default function NewPenaltyPage({ params }: { params: Promise<{ locale: s
       <div className="mb-8">
         <Link
           href={`/${resolvedParams.locale}/penalties`}
-          className="text-blue-600 hover:text-blue-700 mb-4 inline-block"
+          className="text-lime-300 hover:text-lime-200 font-bold mb-4 inline-flex items-center gap-1"
         >
-          ← {tCommon('back')}
+          <ArrowLeftIcon className="h-4 w-4" /> {tCommon('back')}
         </Link>
-        <h1 className="text-3xl font-bold text-gray-900">{t('registerPenalty')}</h1>
+        <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white">{t('registerPenalty')}</h1>
       </div>
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-            <p className="text-red-800">{error}</p>
+          <div className="bg-red-500/10 border border-red-500/40 rounded-xl p-4">
+            <p className="text-red-300">{error}</p>
           </div>
         )}
 
-        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
           {/* Goalkeeper */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={labelClasses}>
               {tCommon('goalkeeper')} *
             </label>
             <select
               required
               value={formData.goalkeeper_id}
               onChange={(e) => setFormData({ ...formData, goalkeeper_id: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className={selectClasses}
             >
               <option value="">{tCommon('select')}</option>
               {goalkeepers.map((gk) => (
@@ -153,57 +161,42 @@ export default function NewPenaltyPage({ params }: { params: Promise<{ locale: s
 
           {/* Match Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t('opponent')} *
-              </label>
-              <input
-                type="text"
-                required
-                value={formData.opponent_name}
-                onChange={(e) => setFormData({ ...formData, opponent_name: e.target.value })}
-                placeholder={t('placeholders.opponent')}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
+            <Input
+              type="text"
+              required
+              label={`${t('opponent')} *`}
+              value={formData.opponent_name}
+              onChange={(e) => setFormData({ ...formData, opponent_name: e.target.value })}
+              placeholder={t('placeholders.opponent')}
+            />
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t('matchDate')}
-              </label>
-              <input
-                type="date"
-                value={formData.match_date}
-                onChange={(e) => setFormData({ ...formData, match_date: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
+            <Input
+              type="date"
+              label={t('matchDate')}
+              value={formData.match_date}
+              onChange={(e) => setFormData({ ...formData, match_date: e.target.value })}
+            />
           </div>
 
           {/* Penalty Taker Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t('penaltyTaker')} *
-              </label>
-              <input
-                type="text"
-                required
-                value={formData.penalty_taker}
-                onChange={(e) => setFormData({ ...formData, penalty_taker: e.target.value })}
-                placeholder={t('placeholders.penaltyTaker')}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
+            <Input
+              type="text"
+              required
+              label={`${t('penaltyTaker')} *`}
+              value={formData.penalty_taker}
+              onChange={(e) => setFormData({ ...formData, penalty_taker: e.target.value })}
+              placeholder={t('placeholders.penaltyTaker')}
+            />
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className={labelClasses}>
                 {t('takerFoot')}
               </label>
               <select
                 value={formData.taker_foot}
                 onChange={(e) => setFormData({ ...formData, taker_foot: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className={selectClasses}
               >
                 <option value="">{tCommon('select')}</option>
                 <option value="left">{t('feet.left')}</option>
@@ -214,22 +207,19 @@ export default function NewPenaltyPage({ params }: { params: Promise<{ locale: s
 
           {/* Competition */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('competition')}
-            </label>
-            <input
+            <Input
               type="text"
+              label={t('competition')}
               value={formData.competition}
               onChange={(e) => setFormData({ ...formData, competition: e.target.value })}
               placeholder={t('placeholders.competition')}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
         </div>
 
         {/* Shot Grid */}
-        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-          <h2 className="text-xl font-semibold mb-4">{t('grid.title')}</h2>
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+          <h2 className="text-xl font-bold text-white mb-4">{t('grid.title')}</h2>
           <PenaltyGrid
             direction={formData.shot_direction}
             height={formData.shot_height}
@@ -238,17 +228,17 @@ export default function NewPenaltyPage({ params }: { params: Promise<{ locale: s
         </div>
 
         {/* Result & Goalkeeper Direction */}
-        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className={labelClasses}>
                 {t('result')} *
               </label>
               <select
                 required
                 value={formData.result}
                 onChange={(e) => setFormData({ ...formData, result: e.target.value as any })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className={selectClasses}
               >
                 <option value="saved">{t('results.saved')}</option>
                 <option value="goal">{t('results.goal')}</option>
@@ -258,13 +248,13 @@ export default function NewPenaltyPage({ params }: { params: Promise<{ locale: s
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className={labelClasses}>
                 {t('goalkeeperDirection')}
               </label>
               <select
                 value={formData.goalkeeper_direction}
                 onChange={(e) => setFormData({ ...formData, goalkeeper_direction: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className={selectClasses}
               >
                 <option value="">{tCommon('select')}</option>
                 <option value="left">{t('directions.left')}</option>
@@ -277,7 +267,7 @@ export default function NewPenaltyPage({ params }: { params: Promise<{ locale: s
 
           {/* Notes */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={labelClasses}>
               {t('notes')}
             </label>
             <textarea
@@ -285,21 +275,18 @@ export default function NewPenaltyPage({ params }: { params: Promise<{ locale: s
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
               placeholder={t('placeholders.notes')}
               rows={4}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className={textareaClasses}
             />
           </div>
 
           {/* Video URL */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('videoUrl')}
-            </label>
-            <input
+            <Input
               type="url"
+              label={t('videoUrl')}
               value={formData.video_url}
               onChange={(e) => setFormData({ ...formData, video_url: e.target.value })}
               placeholder={t('placeholders.videoUrl')}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
         </div>
@@ -309,13 +296,13 @@ export default function NewPenaltyPage({ params }: { params: Promise<{ locale: s
           <button
             type="submit"
             disabled={loading}
-            className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+            className="flex-1 bg-lime-400 text-black font-extrabold px-6 py-3 rounded-full hover:bg-lime-300 transition-all disabled:opacity-50"
           >
             {loading ? tCommon('saving') : tCommon('save')}
           </button>
           <Link
             href={`/${resolvedParams.locale}/penalties`}
-            className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-center"
+            className="px-6 py-3 border border-white/15 text-white/70 hover:border-lime-400/50 hover:text-lime-300 rounded-full font-bold text-center transition-all"
           >
             {tCommon('cancel')}
           </Link>

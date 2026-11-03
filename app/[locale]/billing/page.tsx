@@ -6,11 +6,12 @@ import { useAuth } from '@/lib/contexts/AuthContext';
 import { SubscriptionStatus } from '@/components/billing/SubscriptionStatus';
 import { InvoiceHistory } from '@/components/billing/InvoiceHistory';
 import { UsageLimits } from '@/components/billing/UsageLimits';
-import { 
-  CreditCardIcon, 
+import {
+  CreditCardIcon,
   ArrowTopRightOnSquareIcon,
   ArrowPathIcon,
-  CheckCircleIcon 
+  CheckCircleIcon,
+  XMarkIcon
 } from '@heroicons/react/24/outline';
 
 // Texts for i18n - defined outside component to avoid useEffect warnings
@@ -101,7 +102,7 @@ interface SubscriptionData {
 export default function BillingPage() {
   const locale = useLocale();
   const { user, token } = useAuth();
-  
+
   const [subscriptionData, setSubscriptionData] = useState<SubscriptionData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -133,9 +134,9 @@ export default function BillingPage() {
             Authorization: `Bearer ${token}`,
           },
         });
-        
+
         const data = await response.json();
-        
+
         if (response.ok) {
           setSubscriptionData(data);
         } else {
@@ -154,7 +155,7 @@ export default function BillingPage() {
 
   const handleManageBilling = async () => {
     if (!token) return;
-    
+
     setIsProcessing(true);
     setError(null);
 
@@ -183,7 +184,7 @@ export default function BillingPage() {
 
   const handleCancelSubscription = async () => {
     if (!token || !confirm(texts[locale as keyof typeof texts]?.confirmCancel || 'Are you sure?')) return;
-    
+
     setIsProcessing(true);
     setError(null);
 
@@ -215,7 +216,7 @@ export default function BillingPage() {
 
   const handleReactivateSubscription = async () => {
     if (!token) return;
-    
+
     setIsProcessing(true);
     setError(null);
 
@@ -249,13 +250,13 @@ export default function BillingPage() {
   // Usuario no autenticado
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex items-center justify-center py-24">
         <div className="text-center">
-          <CreditCardIcon className="mx-auto h-12 w-12 text-gray-400" />
-          <p className="mt-4 text-gray-600">{t.notLoggedIn}</p>
+          <CreditCardIcon className="mx-auto h-12 w-12 text-white/30" />
+          <p className="mt-4 text-white/50">{t.notLoggedIn}</p>
           <a
             href={`/${locale}/login`}
-            className="mt-4 inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="mt-4 inline-block px-6 py-2.5 bg-lime-400 text-black font-extrabold rounded-full hover:bg-lime-300 transition-all"
           >
             {t.login}
           </a>
@@ -266,61 +267,62 @@ export default function BillingPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex items-center justify-center py-24">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">{t.loading}</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-400 mx-auto"></div>
+          <p className="mt-4 text-white/50">{t.loading}</p>
         </div>
       </div>
     );
   }
 
-  const hasActiveSubscription = subscriptionData?.subscription && 
+  const hasActiveSubscription = subscriptionData?.subscription &&
     ['active', 'trialing'].includes(subscriptionData.subscription.status);
   const isFree = subscriptionData?.plan.slug === 'free' || !hasActiveSubscription;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">{t.title}</h1>
-          <p className="mt-2 text-gray-600">{t.subtitle}</p>
+          <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white">{t.title}</h1>
+          <p className="mt-2 text-white/50">{t.subtitle}</p>
         </div>
 
         {/* Success Message */}
         {successMessage && (
-          <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center gap-3">
-            <CheckCircleIcon className="h-6 w-6 text-green-500" />
-            <p className="text-green-800">{successMessage}</p>
-            <button 
+          <div className="mb-6 p-4 bg-lime-400/10 border border-lime-400/30 rounded-2xl flex items-center gap-3">
+            <CheckCircleIcon className="h-6 w-6 text-lime-400 shrink-0" />
+            <p className="text-lime-200">{successMessage}</p>
+            <button
               onClick={() => setSuccessMessage(null)}
-              className="ml-auto text-green-600 hover:text-green-800"
+              className="ml-auto text-white/40 hover:text-white transition-colors"
+              aria-label="Cerrar"
             >
-              ×
+              <XMarkIcon className="h-5 w-5" />
             </button>
           </div>
         )}
 
         {/* Error Message */}
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-red-600">{error}</p>
+          <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-2xl">
+            <p className="text-red-300">{error}</p>
           </div>
         )}
 
         <div className="space-y-6">
           {/* Subscription Status */}
           {isFree ? (
-            <div className="rounded-xl border border-gray-200 bg-white p-6">
-              <div className="flex items-center justify-between">
+            <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+              <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900">{t.freePlan}</h3>
-                  <p className="mt-1 text-gray-600">{t.freePlanDesc}</p>
+                  <h3 className="text-xl font-black tracking-tight text-white">{t.freePlan}</h3>
+                  <p className="mt-1 text-white/50">{t.freePlanDesc}</p>
                 </div>
                 <a
                   href={`/${locale}/pricing`}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-lime-400 text-black font-extrabold rounded-full hover:bg-lime-300 transition-all"
                 >
                   {t.upgrade}
                   <ArrowTopRightOnSquareIcon className="h-4 w-4" />
@@ -344,7 +346,7 @@ export default function BillingPage() {
               <button
                 onClick={handleManageBilling}
                 disabled={isProcessing}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium disabled:opacity-50"
+                className="inline-flex items-center gap-2 px-6 py-3 border border-white/15 text-white/70 rounded-full hover:border-lime-400/50 hover:text-lime-300 font-bold transition-all disabled:opacity-50"
               >
                 <CreditCardIcon className="h-5 w-5" />
                 {t.manageBilling}
@@ -355,7 +357,7 @@ export default function BillingPage() {
                 <button
                   onClick={handleReactivateSubscription}
                   disabled={isProcessing}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium disabled:opacity-50"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-lime-400 text-black rounded-full hover:bg-lime-300 font-extrabold transition-all disabled:opacity-50"
                 >
                   {t.reactivate}
                 </button>
@@ -363,7 +365,7 @@ export default function BillingPage() {
                 <button
                   onClick={handleCancelSubscription}
                   disabled={isProcessing}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-white border border-red-300 text-red-600 rounded-lg hover:bg-red-50 font-medium disabled:opacity-50"
+                  className="inline-flex items-center gap-2 px-6 py-3 border border-red-500/40 text-red-300 rounded-full hover:bg-red-500/10 font-bold transition-all disabled:opacity-50"
                 >
                   {t.cancelSubscription}
                 </button>
@@ -378,13 +380,13 @@ export default function BillingPage() {
 
           {/* Features */}
           {subscriptionData?.features && (
-            <div className="rounded-xl border border-gray-200 bg-white p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">{t.features}</h3>
+            <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+              <h3 className="text-lg font-black tracking-tight text-white mb-4">{t.features}</h3>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {Object.entries(subscriptionData.features).map(([key, value]) => (
                   <div key={key} className="flex items-center gap-2">
-                    <span className={`w-2 h-2 rounded-full ${value ? 'bg-green-500' : 'bg-gray-300'}`} />
-                    <span className={`text-sm ${value ? 'text-gray-900' : 'text-gray-400'}`}>
+                    <span className={`w-2 h-2 rounded-full shrink-0 ${value ? 'bg-lime-400' : 'bg-white/20'}`} />
+                    <span className={`text-sm ${value ? 'text-white/80' : 'text-white/30'}`}>
                       {key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                     </span>
                   </div>

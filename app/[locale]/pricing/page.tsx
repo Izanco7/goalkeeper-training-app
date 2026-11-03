@@ -21,7 +21,7 @@ interface Plan {
 export default function PricingPage() {
   const locale = useLocale();
   const { user, token } = useAuth();
-  
+
   const [plans, setPlans] = useState<Plan[]>([]);
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('yearly');
   const [isLoading, setIsLoading] = useState(true);
@@ -35,7 +35,7 @@ export default function PricingPage() {
       try {
         const response = await fetch('/api/stripe/plans');
         const data = await response.json();
-        
+
         if (data.plans) {
           setPlans(data.plans);
         }
@@ -62,7 +62,7 @@ export default function PricingPage() {
           },
         });
         const data = await response.json();
-        
+
         if (data.plan?.slug) {
           setCurrentPlanSlug(data.plan.slug);
         }
@@ -200,54 +200,54 @@ export default function PricingPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex items-center justify-center py-24">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">{pageTexts.loading}</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-400 mx-auto"></div>
+          <p className="mt-4 text-white/50">{pageTexts.loading}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-blue-50 to-white py-16 px-4 sm:px-6 lg:px-8">
+    <div className="py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl">
+          <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-white">
             {pageTexts.title}
           </h1>
-          <p className="mt-4 text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="mt-4 text-xl text-white/50 max-w-2xl mx-auto">
             {pageTexts.subtitle}
           </p>
         </div>
 
         {/* Billing Toggle */}
-        <div className="flex items-center justify-center mb-12">
-          <div className="relative flex items-center gap-4 p-1 bg-gray-100 rounded-full">
+        <div className="flex flex-wrap items-center justify-center mb-12">
+          <div className="relative flex items-center gap-1 p-1 bg-white/[0.06] border border-white/10 rounded-full">
             <button
               onClick={() => setBillingCycle('monthly')}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+              className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${
                 billingCycle === 'monthly'
-                  ? 'bg-white text-gray-900 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'bg-lime-400 text-black'
+                  : 'text-white/50 hover:text-white'
               }`}
             >
               {pageTexts.monthly}
             </button>
             <button
               onClick={() => setBillingCycle('yearly')}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+              className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${
                 billingCycle === 'yearly'
-                  ? 'bg-white text-gray-900 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'bg-lime-400 text-black'
+                  : 'text-white/50 hover:text-white'
               }`}
             >
               {pageTexts.yearly}
             </button>
           </div>
           {billingCycle === 'yearly' && (
-            <span className="ml-3 inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800">
+            <span className="ml-3 mt-2 sm:mt-0 inline-flex items-center rounded-full bg-lime-400/15 border border-lime-400/30 px-3 py-1 text-xs font-bold text-lime-300">
               {pageTexts.savePercent}
             </span>
           )}
@@ -255,8 +255,8 @@ export default function PricingPage() {
 
         {/* Error Message */}
         {error && (
-          <div className="max-w-md mx-auto mb-8 p-4 bg-red-50 border border-red-200 rounded-lg text-center">
-            <p className="text-red-600">{error}</p>
+          <div className="max-w-md mx-auto mb-8 p-4 bg-red-500/10 border border-red-500/30 rounded-2xl text-center">
+            <p className="text-red-300">{error}</p>
           </div>
         )}
 
@@ -290,14 +290,14 @@ export default function PricingPage() {
 
         {/* FAQ */}
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">
+          <h2 className="text-2xl font-black tracking-tight text-white text-center mb-8">
             {pageTexts.faq.title}
           </h2>
-          <div className="space-y-6">
+          <div className="space-y-4">
             {pageTexts.faq.questions.map((item, index) => (
-              <div key={index} className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{item.q}</h3>
-                <p className="text-gray-600">{item.a}</p>
+              <div key={index} className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+                <h3 className="text-lg font-bold text-white mb-2">{item.q}</h3>
+                <p className="text-white/50">{item.a}</p>
               </div>
             ))}
           </div>

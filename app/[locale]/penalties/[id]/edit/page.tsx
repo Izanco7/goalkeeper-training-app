@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { apiGet, apiPut } from '@/lib/utils/api';
+import { Input } from '@/components/ui/Input';
 import PenaltyGrid from '@/components/penalties/PenaltyGrid';
 
 interface Goalkeeper {
@@ -29,6 +30,12 @@ interface Penalty {
   notes: string | null;
   video_url: string | null;
 }
+
+const selectClasses =
+  "w-full px-4 py-2.5 bg-black/40 border border-white/10 rounded-xl text-white focus:ring-2 focus:ring-lime-400/30 focus:border-lime-400/60 outline-none transition-all [&_option]:bg-[#101714] [&_option]:text-white";
+const textareaClasses =
+  "w-full px-4 py-2.5 bg-black/40 border border-white/10 rounded-xl text-white placeholder-white/25 focus:ring-2 focus:ring-lime-400/30 focus:border-lime-400/60 outline-none transition-all";
+const labelClasses = "block text-sm font-bold text-white/70 mb-2";
 
 export default function EditPenaltyPage({ 
   params 
@@ -151,9 +158,9 @@ export default function EditPenaltyPage({
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 p-6">
+      <div>
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-lg shadow-md p-6 text-center">
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-center text-white/70">
             {tCommon('loading')}
           </div>
         </div>
@@ -163,13 +170,13 @@ export default function EditPenaltyPage({
 
   if (!penalty) {
     return (
-      <div className="min-h-screen bg-gray-50 p-6">
+      <div>
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-lg shadow-md p-6 text-center">
-            <p className="text-red-600">{t('errors.notFound')}</p>
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-center">
+            <p className="text-red-300">{t('errors.notFound')}</p>
             <Link
               href={`/${resolvedParams.locale}/penalties`}
-              className="mt-4 inline-block text-blue-600 hover:text-blue-800"
+              className="mt-4 inline-block text-lime-300 hover:text-lime-200 font-bold"
             >
               {tCommon('back')}
             </Link>
@@ -183,14 +190,14 @@ export default function EditPenaltyPage({
     
       <div >
         {/* Header */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 mb-6">
           <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white">
               {t('editPenalty')}
             </h1>
             <Link
               href={`/${resolvedParams.locale}/penalties/${resolvedParams.id}`}
-              className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors"
+              className="px-4 py-2 border border-white/15 text-white/70 hover:border-lime-400/50 hover:text-lime-300 rounded-full font-bold transition-all"
             >
               {tCommon('cancel')}
             </Link>
@@ -199,16 +206,16 @@ export default function EditPenaltyPage({
 
         {/* Error Message */}
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-6">
+          <div className="bg-red-500/10 border border-red-500/40 text-red-300 px-4 py-3 rounded-xl mb-6">
             {error}
           </div>
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6 space-y-6">
+        <form onSubmit={handleSubmit} className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 space-y-6">
           {/* Goalkeeper */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={labelClasses}>
               {tCommon('goalkeeper')} *
             </label>
             <select
@@ -216,7 +223,7 @@ export default function EditPenaltyPage({
               value={formData.goalkeeper_id}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              className={selectClasses}
             >
               <option value="">{t('selectGoalkeeper')}</option>
               {goalkeepers.map((gk) => (
@@ -229,71 +236,51 @@ export default function EditPenaltyPage({
 
           {/* Match Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t('opponentName')} *
-              </label>
-              <input
-                type="text"
-                name="opponent_name"
-                value={formData.opponent_name}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
+            <Input
+              type="text"
+              name="opponent_name"
+              label={`${t('opponentName')} *`}
+              value={formData.opponent_name}
+              onChange={handleChange}
+              required
+            />
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t('matchDate')}
-              </label>
-              <input
-                type="date"
-                name="match_date"
-                value={formData.match_date}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
+            <Input
+              type="date"
+              name="match_date"
+              label={t('matchDate')}
+              value={formData.match_date}
+              onChange={handleChange}
+            />
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t('competition')}
-              </label>
-              <input
-                type="text"
-                name="competition"
-                value={formData.competition}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
+            <Input
+              type="text"
+              name="competition"
+              label={t('competition')}
+              value={formData.competition}
+              onChange={handleChange}
+            />
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t('penaltyTaker')} *
-              </label>
-              <input
-                type="text"
-                name="penalty_taker"
-                value={formData.penalty_taker}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
+            <Input
+              type="text"
+              name="penalty_taker"
+              label={`${t('penaltyTaker')} *`}
+              value={formData.penalty_taker}
+              onChange={handleChange}
+              required
+            />
           </div>
 
           {/* Taker Foot */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={labelClasses}>
               {t('takerFoot')}
             </label>
             <select
               name="taker_foot"
               value={formData.taker_foot}
               onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              className={selectClasses}
             >
               <option value="">{t('selectFoot')}</option>
               <option value="left">{t('leftFoot')}</option>
@@ -303,7 +290,7 @@ export default function EditPenaltyPage({
 
           {/* Shot Direction & Height - Visual Grid */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={labelClasses}>
               {t('shotDirection')} & {t('shotHeight')} *
             </label>
             <PenaltyGrid
@@ -315,7 +302,7 @@ export default function EditPenaltyPage({
 
           {/* Result */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={labelClasses}>
               {t('result')} *
             </label>
             <select
@@ -323,7 +310,7 @@ export default function EditPenaltyPage({
               value={formData.result}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              className={selectClasses}
             >
               <option value="saved">{t('saved')}</option>
               <option value="goal">{t('goal')}</option>
@@ -334,14 +321,14 @@ export default function EditPenaltyPage({
 
           {/* Goalkeeper Direction */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={labelClasses}>
               {t('goalkeeperDirection')}
             </label>
             <select
               name="goalkeeper_direction"
               value={formData.goalkeeper_direction}
               onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              className={selectClasses}
             >
               <option value="">{t('selectDirection')}</option>
               <option value="left">{t('left')}</option>
@@ -352,7 +339,7 @@ export default function EditPenaltyPage({
 
           {/* Notes */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={labelClasses}>
               {t('notes')}
             </label>
             <textarea
@@ -360,22 +347,19 @@ export default function EditPenaltyPage({
               value={formData.notes}
               onChange={handleChange}
               rows={4}
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              className={textareaClasses}
               placeholder={t('notesPlaceholder')}
             />
           </div>
 
           {/* Video URL */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('videoUrl')}
-            </label>
-            <input
+            <Input
               type="url"
               name="video_url"
+              label={t('videoUrl')}
               value={formData.video_url}
               onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
               placeholder="https://..."
             />
           </div>
@@ -384,14 +368,14 @@ export default function EditPenaltyPage({
           <div className="flex justify-end gap-4">
             <Link
               href={`/${resolvedParams.locale}/penalties/${resolvedParams.id}`}
-              className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-6 py-2.5 border border-white/15 text-white/70 hover:border-lime-400/50 hover:text-lime-300 rounded-full font-bold transition-all"
             >
               {tCommon('cancel')}
             </Link>
             <button
               type="submit"
               disabled={saving}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors disabled:opacity-50"
+              className="bg-lime-400 text-black font-extrabold px-6 py-2.5 rounded-full hover:bg-lime-300 transition-all disabled:opacity-50"
             >
               {saving ? tCommon('saving') : tCommon('save')}
             </button>

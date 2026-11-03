@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { PlusIcon } from '@heroicons/react/24/outline';
 import { apiGet } from '@/lib/utils/api';
 import PenaltyCard from '@/components/penalties/PenaltyCard';
 
@@ -86,8 +87,8 @@ export default function PenaltiesPage({ params }: { params: Promise<{ locale: st
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">{tCommon('loading')}</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-400 mx-auto"></div>
+          <p className="mt-4 text-white/50">{tCommon('loading')}</p>
         </div>
       </div>
     );
@@ -96,31 +97,32 @@ export default function PenaltiesPage({ params }: { params: Promise<{ locale: st
   return (
     <div>
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
-          <p className="mt-2 text-gray-600">{t('subtitle')}</p>
+          <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white">{t('title')}</h1>
+          <p className="mt-2 text-white/50">{t('subtitle')}</p>
         </div>
         <Link
           href={`/${resolvedParams.locale}/penalties/new`}
-          className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+          className="inline-flex items-center gap-2 bg-lime-400 text-black font-extrabold px-6 py-3 rounded-full hover:bg-lime-300 transition-all"
         >
+          <PlusIcon className="h-5 w-5" />
           {t('registerPenalty')}
         </Link>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-lg shadow-sm p-4 mb-6 border border-gray-200">
+      <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Goalkeeper filter */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-bold text-white/70 mb-2">
               {t('filters.byGoalkeeper')}
             </label>
             <select
               value={selectedGoalkeeper}
               onChange={(e) => setSelectedGoalkeeper(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 bg-white/[0.05] border border-white/10 rounded-xl text-white focus:ring-2 focus:ring-lime-400/50 focus:border-lime-400/50 outline-none [&_option]:bg-[#101714] [&_option]:text-white"
             >
               <option value="">{t('filters.all')}</option>
               {goalkeepers.map((gk) => (
@@ -133,13 +135,13 @@ export default function PenaltiesPage({ params }: { params: Promise<{ locale: st
 
           {/* Result filter */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-bold text-white/70 mb-2">
               {t('filters.byResult')}
             </label>
             <select
               value={selectedResult}
               onChange={(e) => setSelectedResult(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 bg-white/[0.05] border border-white/10 rounded-xl text-white focus:ring-2 focus:ring-lime-400/50 focus:border-lime-400/50 outline-none [&_option]:bg-[#101714] [&_option]:text-white"
             >
               <option value="">{t('filters.all')}</option>
               <option value="saved">{t('results.saved')}</option>
@@ -154,15 +156,15 @@ export default function PenaltiesPage({ params }: { params: Promise<{ locale: st
       {/* Penalties List */}
       {loading ? (
         <div className="text-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">{tCommon('loading')}</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-400 mx-auto"></div>
+          <p className="mt-4 text-white/50">{tCommon('loading')}</p>
         </div>
       ) : penalties.length === 0 ? (
-        <div className="text-center py-12 bg-white rounded-lg shadow-sm border border-gray-200">
-          <p className="text-gray-600 mb-4">{t('noPenalties')}</p>
+        <div className="text-center py-12 rounded-2xl border border-white/10 bg-white/[0.03]">
+          <p className="text-white/50 mb-4">{t('noPenalties')}</p>
           <Link
             href={`/${resolvedParams.locale}/penalties/new`}
-            className="text-blue-600 hover:text-blue-700"
+            className="text-lime-300 hover:text-lime-200 font-bold"
           >
             {t('registerPenalty')}
           </Link>

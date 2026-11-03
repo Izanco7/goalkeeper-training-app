@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { TeamWithStats } from '@/lib/types/database';
@@ -15,7 +16,7 @@ export default function EditTeamPage() {
   const locale = useLocale();
   const t = useTranslations('teams');
   const tc = useTranslations('common');
-  
+
   const [formData, setFormData] = useState({
     name: '',
     category: '',
@@ -75,38 +76,36 @@ export default function EditTeamPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="py-8 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">{tc('loading')}</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-400 mx-auto"></div>
+          <p className="mt-4 text-white/50">{tc('loading')}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="py-8">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
           <Link
             href={`/${locale}/teams/${params.id}`}
-            className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 mb-4"
+            className="inline-flex items-center text-sm font-bold text-white/50 hover:text-lime-300 mb-4 transition-colors"
           >
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
+            <ArrowLeftIcon className="w-4 h-4 mr-2" />
             {tc('back')}
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900">{t('editTeam')}</h1>
-          <p className="mt-1 text-gray-600">{t('editTeamSubtitle')}</p>
+          <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white">{t('editTeam')}</h1>
+          <p className="mt-1 text-white/50">{t('editTeamSubtitle')}</p>
         </div>
 
         {/* Form */}
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-sm text-red-800">{error}</p>
+            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-2xl">
+              <p className="text-sm text-red-300">{error}</p>
             </div>
           )}
 
@@ -152,7 +151,7 @@ export default function EditTeamPage() {
 
             {/* Color */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-bold text-white/70 mb-2">
                 {t('color')}
               </label>
               <div className="flex items-center gap-4">
@@ -161,14 +160,14 @@ export default function EditTeamPage() {
                   name="color"
                   value={formData.color}
                   onChange={handleChange}
-                  className="h-12 w-20 rounded border border-gray-300 cursor-pointer"
+                  className="h-12 w-20 rounded-xl bg-transparent border border-white/15 cursor-pointer"
                 />
                 <input
                   type="text"
                   value={formData.color}
                   onChange={handleChange}
                   name="color"
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="flex-1 px-3 py-2 bg-white/[0.03] border border-white/10 rounded-xl text-white placeholder:text-white/30 focus:ring-2 focus:ring-lime-400/40 focus:border-lime-400/50 outline-none"
                   placeholder="#2563eb"
                 />
               </div>
@@ -176,7 +175,7 @@ export default function EditTeamPage() {
 
             {/* Description */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-bold text-white/70 mb-2">
                 {t('description')}
               </label>
               <textarea
@@ -184,7 +183,7 @@ export default function EditTeamPage() {
                 value={formData.description}
                 onChange={handleChange}
                 rows={4}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black"
+                className="w-full px-3 py-2 bg-white/[0.03] border border-white/10 rounded-xl text-white placeholder:text-white/30 focus:ring-2 focus:ring-lime-400/40 focus:border-lime-400/50 outline-none"
                 placeholder={t('descriptionPlaceholder')}
               />
             </div>
@@ -200,7 +199,7 @@ export default function EditTeamPage() {
                 {tc('save')}
               </Button>
               <Link href={`/${locale}/teams/${params.id}`} className="flex-1">
-                <Button type="button" variant="secondary" className="w-full">
+                <Button type="button" variant="outline" className="w-full">
                   {tc('cancel')}
                 </Button>
               </Link>
