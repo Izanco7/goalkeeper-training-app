@@ -1,6 +1,10 @@
 import mysql from 'mysql2/promise';
 
 // Configuración de la conexión a MySQL
+// Aiven y otras bases de datos en la nube exigen conexión cifrada (TLS):
+// se activa poniendo DB_SSL=true. Si pegas el certificado CA de Aiven en
+// DB_SSL_CA se verifica al máximo; si no, se cifra sin verificar el CA.
+const useSSL = process.env.DB_SSL === 'true';
 const dbConfig = {
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
@@ -9,7 +13,14 @@ const dbConfig = {
   port: parseInt(process.env.DB_PORT || '3306'),
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0
+  queueLimit: 0,
+  ...(useSSL
+    ? {
+        ssl: process.env.DB_SSL_CA
+          ? { ca: process.env.DB_SSL_CA.replace(/\\n/g, '\n') }
+          : { rejectUnauthorized: false },
+      }
+    : {}),
 };
 
 // Crear pool de conexiones
