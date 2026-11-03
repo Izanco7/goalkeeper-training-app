@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/Button';
+import { PhotoIcon } from '@heroicons/react/24/outline';
 
 interface SessionTaskItemProps {
   task: {
@@ -23,23 +24,23 @@ interface SessionTaskItemProps {
 
 const getIntensityColor = (intensity: string): string => {
   const colors: Record<string, string> = {
-    low: 'bg-green-500',
-    medium: 'bg-yellow-500',
-    high: 'bg-orange-500',
+    low: 'bg-lime-400',
+    medium: 'bg-yellow-400',
+    high: 'bg-orange-400',
     very_high: 'bg-red-500'
   };
-  return colors[intensity] || 'bg-gray-500';
+  return colors[intensity] || 'bg-white/40';
 };
 
 const getCategoryColor = (category: string): string => {
   const colors: Record<string, string> = {
-    technical: 'bg-blue-100 text-blue-800',
-    tactical: 'bg-purple-100 text-purple-800',
-    physical: 'bg-green-100 text-green-800',
-    psychological: 'bg-yellow-100 text-yellow-800',
-    goalkeeper_specific: 'bg-red-100 text-red-800'
+    technical: 'bg-sky-400/15 text-sky-300 border border-sky-400/30',
+    tactical: 'bg-purple-400/15 text-purple-300 border border-purple-400/30',
+    physical: 'bg-lime-400/15 text-lime-300 border border-lime-400/30',
+    psychological: 'bg-yellow-400/15 text-yellow-300 border border-yellow-400/30',
+    goalkeeper_specific: 'bg-red-500/15 text-red-300 border border-red-500/30'
   };
-  return colors[category] || 'bg-gray-100 text-gray-800';
+  return colors[category] || 'bg-white/10 text-white/60 border border-white/15';
 };
 
 export function SessionTaskItem({ task, onEdit, onDelete }: SessionTaskItemProps) {
@@ -47,14 +48,14 @@ export function SessionTaskItem({ task, onEdit, onDelete }: SessionTaskItemProps
   const tTasks = useTranslations('tasks');
 
   return (
-    <div className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+    <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 hover:border-white/20 transition-all">
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-lg font-semibold text-gray-700">
+            <span className="text-lg font-black text-white/40">
               #{task.order_number}
             </span>
-            <h4 className="text-md font-semibold text-gray-900">
+            <h4 className="text-md font-bold text-white">
               {task.task_title || 'Tarea sin título'}
             </h4>
           </div>
@@ -76,33 +77,31 @@ export function SessionTaskItem({ task, onEdit, onDelete }: SessionTaskItemProps
                     task.intensity
                   )}`}
                 />
-                <span className="text-xs text-gray-600">
+                <span className="text-xs text-white/60">
                   {t(task.intensity as any)}
                 </span>
               </div>
             )}
             {task.duration && (
-              <span className="text-xs text-gray-600">
+              <span className="text-xs text-white/60">
                 {task.duration} {tTasks('minutes')}
               </span>
             )}
             {task.task_difficulty && (
-              <span className="text-xs text-gray-600">
+              <span className="text-xs text-white/60">
                 {tTasks(task.task_difficulty as any)}
               </span>
             )}
             {task.design_id && task.design_img && (
-              <div className="flex items-center gap-1 bg-purple-50 text-purple-700 px-2 py-1 rounded-full">
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
+              <div className="flex items-center gap-1 bg-purple-400/15 text-purple-300 border border-purple-400/30 px-2 py-1 rounded-full">
+                <PhotoIcon className="w-3 h-3" />
                 <span className="text-xs font-medium">Diagrama</span>
               </div>
             )}
           </div>
 
           {task.notes && (
-            <p className="text-sm text-gray-600 mt-2">{task.notes}</p>
+            <p className="text-sm text-white/60 mt-2">{task.notes}</p>
           )}
         </div>
 
@@ -120,7 +119,7 @@ export function SessionTaskItem({ task, onEdit, onDelete }: SessionTaskItemProps
             <Button
               variant="outline"
               onClick={() => onDelete(task.id)}
-              className="text-sm py-1 px-2 text-red-600 hover:bg-red-50"
+              className="text-sm py-1 px-2 border-red-500/40 text-red-300 hover:bg-red-500/10"
             >
               Eliminar
             </Button>

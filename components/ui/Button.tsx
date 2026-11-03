@@ -16,18 +16,18 @@ export function Button({
   disabled,
   ...props
 }: ButtonProps) {
-  const baseStyles = 'rounded-lg font-medium transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
-  
+  const baseStyles = 'rounded-full font-extrabold transition-all focus:outline-none focus:ring-2 focus:ring-lime-400/40 disabled:opacity-50 disabled:cursor-not-allowed';
+
   const variants = {
-    primary: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
-    secondary: 'bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500',
-    outline: 'border-2 border-blue-600 text-blue-600 hover:bg-blue-50 focus:ring-blue-500',
+    primary: 'bg-lime-400 text-black hover:bg-lime-300 shadow-[0_0_20px_rgba(163,230,53,0.2)]',
+    secondary: 'bg-white/10 text-white hover:bg-white/15 border border-white/10',
+    outline: 'border-2 border-white/20 text-white/80 hover:border-lime-400/60 hover:text-lime-300',
   };
 
   const sizes = {
-    sm: 'px-3 py-1.5 text-sm',
-    md: 'px-6 py-2',
-    lg: 'px-8 py-3 text-lg',
+    sm: 'px-4 py-1.5 text-sm',
+    md: 'px-6 py-2.5',
+    lg: 'px-8 py-3.5 text-lg',
   };
 
   return (

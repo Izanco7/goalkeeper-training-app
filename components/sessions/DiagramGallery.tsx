@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { Card } from '@/components/ui/Card';
+import { MagnifyingGlassPlusIcon } from '@heroicons/react/24/outline';
 
 import { Modal } from '@/components/ui/Modal';
 
@@ -35,10 +36,10 @@ export function DiagramGallery({ tasks }: DiagramGalleryProps) {
 
   return (
     <>
-      <Card className="print:break-inside-avoid">
+      <Card className="print:break-inside-avoid mb-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold">{t('tacticalDiagrams')}</h2>
-          <span className="text-sm text-gray-500">
+          <h2 className="text-xl font-bold text-white">{t('tacticalDiagrams')}</h2>
+          <span className="text-sm text-white/50">
             {tasksWithDiagrams.length} {tasksWithDiagrams.length === 1 ? 'diagrama' : 'diagramas'}
           </span>
         </div>
@@ -47,7 +48,7 @@ export function DiagramGallery({ tasks }: DiagramGalleryProps) {
           {tasksWithDiagrams.map((task) => (
             <div
               key={task.id}
-              className="relative group cursor-pointer border rounded-lg overflow-hidden hover:shadow-lg transition-shadow print:break-inside-avoid"
+              className="relative group cursor-pointer border border-white/10 rounded-xl overflow-hidden hover:border-lime-400/40 transition-all print:break-inside-avoid"
               onClick={() =>
                 setSelectedDiagram({
                   img: task.design_img!,
@@ -55,7 +56,7 @@ export function DiagramGallery({ tasks }: DiagramGalleryProps) {
                 })
               }
             >
-              <div className="relative aspect-video bg-gray-100">
+              <div className="relative aspect-video bg-black/40">
                 <Image
                   src={`/api/designs/${task.design_img}`}
                   alt={task.task_title || 'Diagrama táctico'}
@@ -64,26 +65,14 @@ export function DiagramGallery({ tasks }: DiagramGalleryProps) {
                   sizes="(max-width: 768px) 50vw, 33vw"
                 />
               </div>
-              <div className="p-2 bg-white">
-                <p className="text-xs font-medium text-gray-900 truncate">
+              <div className="p-2 bg-white/[0.03]">
+                <p className="text-xs font-medium text-white/80 truncate">
                   #{task.order_number} {task.task_title}
                 </p>
               </div>
               <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-opacity flex items-center justify-center print:hidden">
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                  <svg
-                    className="w-12 h-12 text-white drop-shadow-lg"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"
-                    />
-                  </svg>
+                  <MagnifyingGlassPlusIcon className="w-12 h-12 text-white drop-shadow-lg" />
                 </div>
               </div>
             </div>
@@ -94,7 +83,7 @@ export function DiagramGallery({ tasks }: DiagramGalleryProps) {
         <div className="hidden print:block mt-8 space-y-8">
           {tasksWithDiagrams.map((task) => (
             <div key={`print-${task.id}`} className="break-inside-avoid">
-              <h3 className="text-lg font-semibold mb-3">
+              <h3 className="text-lg font-semibold mb-3 print:text-black">
                 #{task.order_number} - {task.task_title || 'Sin título'}
               </h3>
               <div className="relative w-full" style={{ height: '500px' }}>

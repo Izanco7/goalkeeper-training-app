@@ -1,4 +1,14 @@
 import { useTranslations } from 'next-intl';
+import {
+  TrophyIcon,
+  ClockIcon,
+  HandRaisedIcon,
+  XCircleIcon,
+  ShieldCheckIcon,
+  StarIcon,
+  PaperAirplaneIcon,
+  ArrowUpIcon
+} from '@heroicons/react/24/outline';
 
 interface MatchStatsProps {
   stats: {
@@ -21,69 +31,72 @@ export default function MatchStats({ stats }: MatchStatsProps) {
     {
       label: t('totalMatches'),
       value: stats.total_matches,
-      icon: '🏆',
-      color: 'bg-blue-50 text-blue-700 border-blue-200'
+      icon: TrophyIcon,
+      iconClass: 'bg-lime-400/15 text-lime-300'
     },
     {
       label: t('totalMinutes'),
       value: stats.total_minutes,
-      icon: '⏱️',
-      color: 'bg-purple-50 text-purple-700 border-purple-200'
+      icon: ClockIcon,
+      iconClass: 'bg-sky-400/15 text-sky-300'
     },
     {
       label: t('totalSaves'),
       value: stats.total_saves,
-      icon: '🧤',
-      color: 'bg-green-50 text-green-700 border-green-200'
+      icon: HandRaisedIcon,
+      iconClass: 'bg-lime-400/15 text-lime-300'
     },
     {
       label: t('totalGoals'),
       value: stats.total_goals_conceded,
-      icon: '⚽',
-      color: 'bg-red-50 text-red-700 border-red-200'
+      icon: XCircleIcon,
+      iconClass: 'bg-red-500/15 text-red-300'
     },
     {
       label: t('cleanSheets'),
       value: stats.clean_sheets,
-      icon: '🛡️',
-      color: 'bg-emerald-50 text-emerald-700 border-emerald-200'
+      icon: ShieldCheckIcon,
+      iconClass: 'bg-emerald-400/15 text-emerald-300'
     },
     {
       label: t('avgRating'),
       value: stats.avg_rating ? stats.avg_rating.toFixed(2) : 'N/A',
-      icon: '⭐',
-      color: 'bg-yellow-50 text-yellow-700 border-yellow-200'
+      icon: StarIcon,
+      iconClass: 'bg-amber-400/15 text-amber-300'
     },
     {
       label: t('avgDistribution'),
       value: stats.avg_distribution ? `${stats.avg_distribution.toFixed(1)}%` : 'N/A',
-      icon: '🎯',
-      color: 'bg-indigo-50 text-indigo-700 border-indigo-200'
+      icon: PaperAirplaneIcon,
+      iconClass: 'bg-violet-400/15 text-violet-300'
     },
     {
       label: 'Balones Aéreos',
       value: stats.total_high_balls,
-      icon: '🔝',
-      color: 'bg-orange-50 text-orange-700 border-orange-200'
+      icon: ArrowUpIcon,
+      iconClass: 'bg-orange-400/15 text-orange-300'
     }
   ];
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-      {statCards.map((stat, index) => (
-        <div
-          key={index}
-          className={`p-4 rounded-lg border ${stat.color} transition-transform hover:scale-105`}
-        >
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-2xl">{stat.icon}</span>
-            <div className="text-right">
-              <p className="text-2xl font-bold">{stat.value}</p>
+      {statCards.map((stat, index) => {
+        const Icon = stat.icon;
+        return (
+          <div
+            key={index}
+            className="p-4 rounded-2xl border border-white/10 bg-white/[0.03] hover:border-lime-400/30 hover:-translate-y-0.5 transition-all"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <span className={`h-9 w-9 rounded-full flex items-center justify-center ${stat.iconClass}`}>
+                <Icon className="h-5 w-5" />
+              </span>
+              <p className="text-2xl font-black text-white">{stat.value}</p>
             </div>
+            <p className="text-sm font-medium text-white/50">{stat.label}</p>
           </div>
-          <p className="text-sm font-medium">{stat.label}</p>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

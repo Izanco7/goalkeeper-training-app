@@ -1,5 +1,12 @@
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  ArrowDownIcon,
+  ArrowUpIcon,
+  MinusIcon
+} from '@heroicons/react/24/outline';
 
 interface Penalty {
   id: number;
@@ -26,41 +33,43 @@ export default function PenaltyCard({ penalty, locale, showGoalkeeper = false }:
   const getResultColor = (result: string) => {
     switch (result) {
       case 'saved':
-        return 'bg-green-100 text-green-800 border-green-300';
+        return 'bg-lime-400/15 text-lime-300 border-lime-400/30';
       case 'goal':
-        return 'bg-red-100 text-red-800 border-red-300';
+        return 'bg-red-500/15 text-red-300 border-red-500/30';
       case 'missed':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-300';
+        return 'bg-amber-400/15 text-amber-300 border-amber-400/30';
       case 'post':
-        return 'bg-orange-100 text-orange-800 border-orange-300';
+        return 'bg-orange-500/15 text-orange-300 border-orange-500/30';
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-300';
+        return 'bg-white/5 text-white/60 border-white/10';
     }
   };
 
   const getDirectionIcon = (direction: string) => {
+    const iconClasses = 'h-5 w-5 text-lime-400';
     switch (direction) {
       case 'left':
-        return '←';
+        return <ArrowLeftIcon className={iconClasses} />;
       case 'right':
-        return '→';
+        return <ArrowRightIcon className={iconClasses} />;
       case 'center':
-        return '↓';
+        return <ArrowDownIcon className={iconClasses} />;
       default:
-        return '•';
+        return <MinusIcon className={iconClasses} />;
     }
   };
 
   const getHeightIcon = (height: string) => {
+    const iconClasses = 'h-5 w-5 text-lime-400';
     switch (height) {
       case 'high':
-        return '↑';
+        return <ArrowUpIcon className={iconClasses} />;
       case 'mid':
-        return '→';
+        return <ArrowRightIcon className={iconClasses} />;
       case 'low':
-        return '↓';
+        return <ArrowDownIcon className={iconClasses} />;
       default:
-        return '•';
+        return <MinusIcon className={iconClasses} />;
     }
   };
 
@@ -76,62 +85,62 @@ export default function PenaltyCard({ penalty, locale, showGoalkeeper = false }:
   return (
     <Link
       href={`/${locale}/penalties/${penalty.id}`}
-      className="block bg-white rounded-lg shadow hover:shadow-md transition-shadow p-4 border border-gray-200"
+      className="block rounded-2xl border border-white/10 bg-white/[0.03] hover:border-lime-400/40 hover:bg-white/[0.05] transition-all p-4"
     >
       {/* Header */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1">
-          <h3 className="font-semibold text-lg text-gray-900 mb-1">
+          <h3 className="font-bold text-lg text-white mb-1">
             {penalty.opponent_name}
           </h3>
           {showGoalkeeper && penalty.goalkeeper_name && (
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-white/60">
               {penalty.goalkeeper_name}
             </p>
           )}
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-white/40">
             {formatDate(penalty.match_date)}
           </p>
         </div>
         
-        <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getResultColor(penalty.result)}`}>
+        <span className={`px-3 py-1 rounded-full text-xs font-bold border ${getResultColor(penalty.result)}`}>
           {t(`results.${penalty.result}`)}
         </span>
       </div>
 
       {/* Penalty Taker */}
       <div className="mb-3">
-        <p className="text-sm font-medium text-gray-700">
-          {t('penaltyTaker')}: <span className="text-gray-900">{penalty.penalty_taker}</span>
+        <p className="text-sm font-bold text-white/70">
+          {t('penaltyTaker')}: <span className="text-white">{penalty.penalty_taker}</span>
         </p>
       </div>
 
       {/* Shot Info */}
       <div className="grid grid-cols-2 gap-2 mb-3">
-        <div className="bg-gray-50 rounded p-2">
-          <p className="text-xs text-gray-600 mb-1">{t('shotDirection')}</p>
-          <div className="flex items-center gap-1">
-            <span className="text-lg">{getDirectionIcon(penalty.shot_direction)}</span>
-            <span className="text-sm font-medium">{t(`directions.${penalty.shot_direction}`)}</span>
+        <div className="bg-white/[0.04] border border-white/10 rounded-xl p-2">
+          <p className="text-xs text-white/50 mb-1">{t('shotDirection')}</p>
+          <div className="flex items-center gap-1.5">
+            {getDirectionIcon(penalty.shot_direction)}
+            <span className="text-sm font-bold text-white">{t(`directions.${penalty.shot_direction}`)}</span>
           </div>
         </div>
 
-        <div className="bg-gray-50 rounded p-2">
-          <p className="text-xs text-gray-600 mb-1">{t('shotHeight')}</p>
-          <div className="flex items-center gap-1">
-            <span className="text-lg">{getHeightIcon(penalty.shot_height)}</span>
-            <span className="text-sm font-medium">{t(`heights.${penalty.shot_height}`)}</span>
+        <div className="bg-white/[0.04] border border-white/10 rounded-xl p-2">
+          <p className="text-xs text-white/50 mb-1">{t('shotHeight')}</p>
+          <div className="flex items-center gap-1.5">
+            {getHeightIcon(penalty.shot_height)}
+            <span className="text-sm font-bold text-white">{t(`heights.${penalty.shot_height}`)}</span>
           </div>
         </div>
       </div>
 
       {/* Goalkeeper Direction */}
       {penalty.goalkeeper_direction && (
-        <div className="bg-blue-50 rounded p-2">
-          <p className="text-xs text-gray-600 mb-1">{t('goalkeeperDirection')}</p>
-          <div className="flex items-center gap-1">
-            <span className="text-lg">{getDirectionIcon(penalty.goalkeeper_direction)}</span>
-            <span className="text-sm font-medium">{t(`directions.${penalty.goalkeeper_direction}`)}</span>
+        <div className="bg-lime-400/[0.06] border border-lime-400/20 rounded-xl p-2">
+          <p className="text-xs text-white/50 mb-1">{t('goalkeeperDirection')}</p>
+          <div className="flex items-center gap-1.5">
+            {getDirectionIcon(penalty.goalkeeper_direction)}
+            <span className="text-sm font-bold text-white">{t(`directions.${penalty.goalkeeper_direction}`)}</span>
           </div>
         </div>
       )}

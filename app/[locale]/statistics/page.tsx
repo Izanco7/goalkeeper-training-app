@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback, use } from 'react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { ChartBarIcon, PlusIcon, TrophyIcon, UsersIcon, ArrowsRightLeftIcon } from '@heroicons/react/24/outline';
 import { GoalkeeperStatistics } from '@/lib/db/models/GoalkeeperStatisticsModel';
 import StatsGrid from '@/components/statistics/StatsGrid';
 import { apiGet } from '@/lib/utils/api';
@@ -83,7 +84,7 @@ export default function StatisticsPage({ params }: PageProps) {
     return (
       <div className="p-6">
         <div className="flex justify-center items-center h-64">
-          <div className="text-xl text-gray-600">{t('loadingStatistics')}</div>
+          <div className="text-lg text-white/50">{t('loadingStatistics')}</div>
         </div>
       </div>
     );
@@ -91,27 +92,31 @@ export default function StatisticsPage({ params }: PageProps) {
 
   return (
     <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">📊 {t('title')}</h1>
+      <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
+        <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white flex items-center gap-3">
+          <ChartBarIcon className="h-8 w-8 text-lime-400" />
+          {t('title')}
+        </h1>
         <Link
           href={`/${resolvedParams.locale}/statistics/new`}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          className="inline-flex items-center gap-2 bg-lime-400 text-black font-extrabold rounded-full px-5 py-2.5 hover:bg-lime-300 transition-all"
         >
-          ➕ {t('newStatistics')}
+          <PlusIcon className="h-5 w-5" />
+          {t('newStatistics')}
         </Link>
       </div>
 
       {/* Filtros */}
-      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+      <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-bold text-white/70 mb-2">
               {t('filters.byGoalkeeper')}
             </label>
             <select
               value={selectedGoalkeeper}
               onChange={handleGoalkeeperChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2.5 bg-black/40 border border-white/10 text-white rounded-xl focus:border-lime-400/60 focus:outline-none transition-colors"
             >
               <option value="">{t('filters.all')}</option>
               {goalkeepers.map((gk) => (
@@ -123,13 +128,13 @@ export default function StatisticsPage({ params }: PageProps) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-bold text-white/70 mb-2">
               {t('filters.bySeason')}
             </label>
             <select
               value={selectedSeason}
               onChange={handleSeasonChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2.5 bg-black/40 border border-white/10 text-white rounded-xl focus:border-lime-400/60 focus:outline-none transition-colors disabled:opacity-50"
               disabled={!!selectedGoalkeeper}
             >
               <option value="">{t('filters.all')}</option>
@@ -145,27 +150,35 @@ export default function StatisticsPage({ params }: PageProps) {
 
       {/* Lista de estadísticas */}
       {statistics.length === 0 ? (
-        <div className="bg-white rounded-lg shadow-md p-12 text-center">
-          <p className="text-xl text-gray-500">{t('noStatistics')}</p>
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-12 text-center">
+          <p className="text-lg text-white/50">{t('noStatistics')}</p>
         </div>
       ) : (
         <div className="grid gap-6">
           {statistics.map((stat) => (
-            <div key={stat.id} className="bg-white rounded-lg shadow-md p-6">
+            <div key={stat.id} className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
               <div className="flex justify-between items-start mb-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-800">
+                  <h2 className="text-2xl font-black tracking-tight text-white">
                     {stat.goalkeeper_name}
                   </h2>
-                  <div className="flex gap-4 mt-2 text-sm text-gray-600">
-                    <span>🏆 {stat.season}</span>
-                    {stat.team_name && <span>🔵 {stat.team_name}</span>}
+                  <div className="flex gap-4 mt-2 text-sm text-white/50">
+                    <span className="inline-flex items-center gap-1.5">
+                      <TrophyIcon className="h-4 w-4 text-amber-300" />
+                      {stat.season}
+                    </span>
+                    {stat.team_name && (
+                      <span className="inline-flex items-center gap-1.5">
+                        <UsersIcon className="h-4 w-4 text-sky-300" />
+                        {stat.team_name}
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div className="flex gap-2">
                   <Link
                     href={`/${resolvedParams.locale}/statistics/${stat.id}`}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    className="px-4 py-2 bg-lime-400 text-black font-extrabold rounded-full hover:bg-lime-300 transition-all text-sm"
                   >
                     {t('actions.view')}
                   </Link>
@@ -182,20 +195,20 @@ export default function StatisticsPage({ params }: PageProps) {
       <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
         <Link
           href={`/${resolvedParams.locale}/statistics/compare`}
-          className="bg-purple-600 text-white p-6 rounded-lg hover:bg-purple-700 transition-colors text-center"
+          className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-center hover:border-lime-400/40 transition-all"
         >
-          <div className="text-4xl mb-2">🏆</div>
-          <div className="text-xl font-bold">{t('comparison.title')}</div>
-          <div className="text-sm opacity-90 mt-1">{t('comparison.selectGoalkeepers')}</div>
+          <ArrowsRightLeftIcon className="h-10 w-10 text-lime-400 mx-auto mb-3" />
+          <div className="text-xl font-extrabold text-white">{t('comparison.title')}</div>
+          <div className="text-sm text-white/50 mt-1">{t('comparison.selectGoalkeepers')}</div>
         </Link>
 
         <Link
           href={`/${resolvedParams.locale}/statistics/top-performers`}
-          className="bg-green-600 text-white p-6 rounded-lg hover:bg-green-700 transition-colors text-center"
+          className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-center hover:border-lime-400/40 transition-all"
         >
-          <div className="text-4xl mb-2">⭐</div>
-          <div className="text-xl font-bold">{t('topPerformers.title')}</div>
-          <div className="text-sm opacity-90 mt-1">{t('topPerformers.subtitle')}</div>
+          <TrophyIcon className="h-10 w-10 text-lime-400 mx-auto mb-3" />
+          <div className="text-xl font-extrabold text-white">{t('topPerformers.title')}</div>
+          <div className="text-sm text-white/50 mt-1">{t('topPerformers.subtitle')}</div>
         </Link>
       </div>
     </div>

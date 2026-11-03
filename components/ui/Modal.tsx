@@ -43,23 +43,23 @@ export function Modal({ isOpen, onClose, title, children, size = 'lg' }: ModalPr
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
-      <div 
-        className="absolute inset-0 bg-black bg-opacity-50 transition-opacity"
+      <div
+        className="absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity"
         onClick={onClose}
       />
-      
+
       {/* Modal */}
-      <div 
+      <div
         ref={modalRef}
-        className={`relative bg-white rounded-lg shadow-xl ${sizeClasses[size]} ${size === 'full' ? '' : 'max-h-[90vh]'} w-full mx-4 flex flex-col`}
+        className={`relative bg-[#0d1310] border border-white/10 rounded-2xl shadow-2xl text-white ${sizeClasses[size]} ${size === 'full' ? '' : 'max-h-[90vh]'} w-full mx-4 flex flex-col`}
       >
         {/* Header */}
         {title && (
-          <div className="flex items-center justify-between px-6 py-4 border-b">
-            <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
+          <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
+            <h2 className="text-xl font-extrabold tracking-tight">{title}</h2>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors"
+              className="text-white/40 hover:text-white transition-colors"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -67,7 +67,7 @@ export function Modal({ isOpen, onClose, title, children, size = 'lg' }: ModalPr
             </button>
           </div>
         )}
-        
+
         {/* Content */}
         <div className={`flex-1 ${size === 'full' ? 'overflow-hidden' : 'overflow-y-auto'}`}>
           {children}

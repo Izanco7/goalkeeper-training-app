@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { useParams, useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import { MapPinIcon } from '@heroicons/react/24/outline';
 
 interface SessionCardProps {
   session: {
@@ -24,22 +25,22 @@ interface SessionCardProps {
 
 const getStatusColor = (status: string): string => {
   const colors: Record<string, string> = {
-    planned: 'bg-blue-100 text-blue-800',
-    completed: 'bg-green-100 text-green-800',
-    cancelled: 'bg-red-100 text-red-800'
+    planned: 'bg-sky-400/15 text-sky-300 border border-sky-400/30',
+    completed: 'bg-lime-400/15 text-lime-300 border border-lime-400/30',
+    cancelled: 'bg-red-500/15 text-red-300 border border-red-500/30'
   };
-  return colors[status] || 'bg-gray-100 text-gray-800';
+  return colors[status] || 'bg-white/10 text-white/60 border border-white/15';
 };
 
 const getTypeColor = (type: string): string => {
   const colors: Record<string, string> = {
-    training: 'bg-purple-100 text-purple-800',
-    match: 'bg-orange-100 text-orange-800',
-    recovery: 'bg-green-100 text-green-800',
-    tactical: 'bg-blue-100 text-blue-800',
-    physical: 'bg-red-100 text-red-800'
+    training: 'bg-purple-400/15 text-purple-300 border border-purple-400/30',
+    match: 'bg-orange-400/15 text-orange-300 border border-orange-400/30',
+    recovery: 'bg-lime-400/15 text-lime-300 border border-lime-400/30',
+    tactical: 'bg-sky-400/15 text-sky-300 border border-sky-400/30',
+    physical: 'bg-red-500/15 text-red-300 border border-red-500/30'
   };
-  return colors[type] || 'bg-gray-100 text-gray-800';
+  return colors[type] || 'bg-white/10 text-white/60 border border-white/15';
 };
 
 const formatDate = (dateString: string): string => {
@@ -71,12 +72,12 @@ export function SessionCard({ session, onDelete }: SessionCardProps) {
   };
 
   return (
-    <Card className="hover:shadow-lg transition-shadow">
+    <Card className="hover:border-lime-400/30 transition-all">
       <div className="flex flex-col h-full">
         {/* Date Badge */}
         <div className="flex items-start justify-between mb-3">
           <div className="flex-1">
-            <div className="text-sm font-medium text-gray-500 mb-1">
+            <div className="text-sm font-medium text-white/50 mb-1">
               {formatDate(session.session_date)}
               {session.start_time && (
                 <span className="ml-2">
@@ -85,11 +86,11 @@ export function SessionCard({ session, onDelete }: SessionCardProps) {
                 </span>
               )}
             </div>
-            <h3 className="text-lg font-semibold text-gray-900">
+            <h3 className="text-lg font-bold text-white">
               {session.title}
             </h3>
             {session.team_name && (
-              <p className="text-sm text-gray-600 mt-1">{session.team_name}</p>
+              <p className="text-sm text-white/60 mt-1">{session.team_name}</p>
             )}
           </div>
         </div>
@@ -111,16 +112,13 @@ export function SessionCard({ session, onDelete }: SessionCardProps) {
             {t(session.status as any)}
           </span>
           {session.location && (
-            <span className="text-xs text-gray-600 flex items-center gap-1">
-              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
+            <span className="text-xs text-white/60 flex items-center gap-1">
+              <MapPinIcon className="w-3 h-3 text-lime-400" />
               {session.location}
             </span>
           )}
           {session.task_count !== undefined && session.task_count > 0 && (
-            <span className="text-xs text-gray-600">
+            <span className="text-xs text-white/60">
               {session.task_count} {session.task_count === 1 ? 'tarea' : 'tareas'}
             </span>
           )}
@@ -128,7 +126,7 @@ export function SessionCard({ session, onDelete }: SessionCardProps) {
 
         {/* Description */}
         {session.description && (
-          <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+          <p className="text-sm text-white/60 mb-4 line-clamp-2">
             {session.description}
           </p>
         )}
@@ -145,7 +143,7 @@ export function SessionCard({ session, onDelete }: SessionCardProps) {
             <Button
               variant="outline"
               onClick={() => onDelete(session.id)}
-              className="text-red-600 hover:bg-red-50"
+              className="border-red-500/40 text-red-300 hover:bg-red-500/10"
             >
               {t('deleteSession')}
             </Button>

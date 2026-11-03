@@ -3,6 +3,7 @@
 import { useEffect, useState, use } from 'react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { TrophyIcon, CheckIcon } from '@heroicons/react/24/outline';
 import { GoalkeeperStatistics } from '@/lib/db/models/GoalkeeperStatisticsModel';
 import { apiGet } from '@/lib/utils/api';
 
@@ -76,21 +77,25 @@ export default function CompareGoalkeepersPage({ params }: PageProps) {
     );
   };
 
+  const thClasses =
+    'px-6 py-3 text-xs font-bold text-white/40 uppercase tracking-widest';
+
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <div className="flex justify-between items-center mb-4">
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 mb-6">
+          <div className="flex flex-wrap justify-between items-center gap-4 mb-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                🏆 {t('comparison.title')}
+              <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white flex items-center gap-3">
+                <TrophyIcon className="h-8 w-8 text-lime-400" />
+                {t('comparison.title')}
               </h1>
-              <p className="text-gray-600 mt-2">{t('comparison.selectGoalkeepers')}</p>
+              <p className="text-white/50 mt-2">{t('comparison.selectGoalkeepers')}</p>
             </div>
             <Link
               href={`/${resolvedParams.locale}/statistics`}
-              className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors"
+              className="border border-white/15 text-white/70 hover:border-lime-400/50 hover:text-lime-300 rounded-full font-bold px-4 py-2 text-sm transition-all"
             >
               {tCommon('back')}
             </Link>
@@ -99,13 +104,13 @@ export default function CompareGoalkeepersPage({ params }: PageProps) {
           {/* Filtros */}
           <div className="flex gap-4 mt-6">
             <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-bold text-white/70 mb-2">
                 {t('fields.season')}
               </label>
               <select
                 value={season}
                 onChange={(e) => setSeason(e.target.value)}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                className="w-full px-4 py-2.5 bg-black/40 border border-white/10 text-white rounded-xl focus:border-lime-400/60 focus:outline-none transition-colors"
               >
                 {seasons.map((s) => (
                   <option key={s} value={s}>
@@ -118,8 +123,8 @@ export default function CompareGoalkeepersPage({ params }: PageProps) {
         </div>
 
         {/* Selección de porteros */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 mb-6">
+          <h2 className="text-xl font-bold text-white mb-4">
             {t('comparison.selectGoalkeepers')} ({selectedGoalkeepers.length} {t('comparison.selected')})
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -127,18 +132,18 @@ export default function CompareGoalkeepersPage({ params }: PageProps) {
               <button
                 key={gk.id}
                 onClick={() => toggleGoalkeeper(gk.id)}
-                className={`p-4 rounded-lg border-2 transition-all ${
+                className={`p-4 rounded-2xl border transition-all text-left ${
                   selectedGoalkeepers.includes(gk.id)
-                    ? 'border-purple-600 bg-purple-50'
-                    : 'border-gray-300 bg-white hover:border-purple-300'
+                    ? 'border-lime-400/70 bg-lime-400/10'
+                    : 'border-white/15 bg-white/[0.02] hover:border-lime-400/40'
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-medium">
+                  <span className="font-bold text-white">
                     {gk.first_name} {gk.last_name}
                   </span>
                   {selectedGoalkeepers.includes(gk.id) && (
-                    <span className="text-purple-600">✓</span>
+                    <CheckIcon className="h-5 w-5 text-lime-300" />
                   )}
                 </div>
               </button>
@@ -148,7 +153,7 @@ export default function CompareGoalkeepersPage({ params }: PageProps) {
           <button
             onClick={handleCompare}
             disabled={selectedGoalkeepers.length < 2 || loading}
-            className="mt-6 w-full bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-semibold"
+            className="mt-6 w-full bg-lime-400 text-black font-extrabold px-6 py-3 rounded-full hover:bg-lime-300 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
           >
             {loading ? tCommon('loading') : t('comparison.compare')}
           </button>
@@ -156,93 +161,93 @@ export default function CompareGoalkeepersPage({ params }: PageProps) {
 
         {/* Resultados de comparación */}
         {comparison.length > 0 && (
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <table className="min-w-full">
+                <thead>
+                  <tr className="border-b border-white/10">
+                    <th className={`${thClasses} text-left`}>
                       {tCommon('goalkeeper')}
                     </th>
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className={`${thClasses} text-center`}>
                       {t('fields.matchesPlayed')}
                     </th>
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className={`${thClasses} text-center`}>
                       {t('fields.minutesPlayed')}
                     </th>
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className={`${thClasses} text-center`}>
                       {t('fields.goalsConceded')}
                     </th>
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className={`${thClasses} text-center`}>
                       {t('calculated.goalsPerMatch')}
                     </th>
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className={`${thClasses} text-center`}>
                       {t('fields.cleanSheets')}
                     </th>
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className={`${thClasses} text-center`}>
                       {t('calculated.cleanSheetPercentage')}
                     </th>
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className={`${thClasses} text-center`}>
                       {t('fields.saves')}
                     </th>
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className={`${thClasses} text-center`}>
                       {t('calculated.savePercentage')}
                     </th>
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className={`${thClasses} text-center`}>
                       {t('fields.penaltiesSaved')}
                     </th>
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className={`${thClasses} text-center`}>
                       {t('calculated.penaltySavePercentage')}
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody>
                   {comparison.map((stat) => (
-                    <tr key={stat.id} className="hover:bg-gray-50">
+                    <tr key={stat.id} className="border-b border-white/5 hover:bg-white/[0.04] transition-colors">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <Link
                           href={`/${resolvedParams.locale}/statistics/${stat.id}`}
-                          className="text-blue-600 hover:text-blue-800 font-medium"
+                          className="text-lime-300 hover:text-lime-200 font-bold"
                         >
                           {stat.goalkeeper_name}
                         </Link>
-                        <div className="text-sm text-gray-500">{stat.team_name}</div>
+                        <div className="text-sm text-white/40">{stat.team_name}</div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-center text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-center text-white/80">
                         {stat.matches_played}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-center text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-center text-white/80">
                         {stat.minutes_played}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-center text-red-600 font-semibold">
+                      <td className="px-6 py-4 whitespace-nowrap text-center text-red-400 font-bold">
                         {stat.goals_conceded}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-center text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-center text-white/80">
                         {Number(stat.goals_per_match ?? 0).toFixed(2)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-center text-green-600 font-semibold">
+                      <td className="px-6 py-4 whitespace-nowrap text-center text-lime-300 font-semibold">
                         {stat.clean_sheets}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center">
-                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-lime-400/15 text-lime-300 border border-lime-400/30">
                           {Number(stat.clean_sheet_percentage ?? 0).toFixed(1)}
                           %
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-center text-blue-600 font-semibold">
+                      <td className="px-6 py-4 whitespace-nowrap text-center text-sky-300 font-semibold">
                         {stat.saves}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center">
-                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-blue-100 text-blue-800">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-sky-400/15 text-sky-300 border border-sky-400/30">
                           {Number(stat.save_percentage ?? 0).toFixed(1)}
                           %
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-center text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-center text-white/80">
                         {stat.penalties_saved}/{stat.penalties_faced}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center">
-                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-purple-100 text-purple-800">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-violet-400/15 text-violet-300 border border-violet-400/30">
                           {Number(stat.penalty_save_percentage ?? 0).toFixed(1)}
                           %
                         </span>

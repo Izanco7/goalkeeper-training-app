@@ -6,6 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { TaskCard } from '@/components/tasks/TaskCard';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { apiGet, apiDelete } from '@/lib/utils/api';
 
 interface Task {
@@ -20,6 +21,11 @@ interface Task {
   is_public: boolean;
   user_id: number;
 }
+
+const chipBase =
+  'rounded-full border px-4 py-1.5 text-sm font-bold transition-all';
+const chipActive = 'bg-lime-400/15 text-lime-300 border-lime-400/40';
+const chipInactive = 'border-white/10 text-white/50 hover:text-white hover:border-white/25';
 
 export default function TasksPage() {
   const t = useTranslations('tasks');
@@ -80,83 +86,94 @@ export default function TasksPage() {
   };
 
   return (
-    
-      <div>
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
-          <p className="text-gray-600 mt-2">{t('subtitle')}</p>
-        </div>
-
-        {/* Filters */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            {/* Search */}
-            <form onSubmit={handleSearch} className="md:col-span-2">
-              <Input
-                type="text"
-                placeholder={t('searchPlaceholder')}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </form>
-
-            {/* Category Filter */}
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="">{t('allTasks')}</option>
-              {categories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {t(cat as any)}
-                </option>
-              ))}
-            </select>
-
-            {/* My Tasks Toggle */}
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={showMyTasks}
-                onChange={(e) => setShowMyTasks(e.target.checked)}
-                className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
-              />
-              <span className="text-sm text-gray-700">{t('myTasks')}</span>
-            </label>
-          </div>
-
-          <div className="mt-4 flex justify-end">
-            <Button onClick={() => router.push(`/${locale}/tasks/new`)}>
-              + {t('createTask')}
-            </Button>
-          </div>
-        </div>
-
-        {/* Tasks Grid */}
-        {loading ? (
-          <div className="text-center py-12">
-            <p className="text-gray-600">Cargando...</p>
-          </div>
-        ) : tasks.length === 0 ? (
-          <div className="bg-white rounded-lg shadow-sm p-12 text-center">
-            <p className="text-gray-600 mb-2">{t('noTasks')}</p>
-            <p className="text-sm text-gray-500 mb-6">
-              {t('noTasksDescription')}
-            </p>
-            <Button onClick={() => router.push(`/${locale}/tasks/new`)}>
-              + {t('createTask')}
-            </Button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {tasks.map((task) => (
-              <TaskCard key={task.id} task={task} onDelete={handleDelete} />
-            ))}
-          </div>
-        )}
+    <div>
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white">{t('title')}</h1>
+        <p className="text-white/50 mt-2">{t('subtitle')}</p>
       </div>
-    
+
+      {/* Filters */}
+      <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 mb-6">
+        {/* Search */}
+        <form onSubmit={handleSearch} className="mb-5">
+          <div className="relative">
+            <MagnifyingGlassIcon className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30" />
+            <Input
+              type="text"
+              placeholder={t('searchPlaceholder')}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-11"
+            />
+          </div>
+        </form>
+
+        {/* Category Filter */}
+        <div className="flex flex-wrap gap-2 mb-5">
+          <button
+            type="button"
+            onClick={() => setSelectedCategory('')}
+            className={`${chipBase} ${selectedCategory === '' ? chipActive : chipInactive}`}
+          >
+            {t('allTasks')}
+          </button>
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => setSelectedCategory(cat)}
+              className={`${chipBase} ${selectedCategory === cat ? chipActive : chipInactive}`}
+            >
+              {t(cat as any)}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          {/* My Tasks Toggle */}
+          <button
+            type="button"
+            onClick={() => setShowMyTasks(!showMyTasks)}
+            className={`${chipBase} ${showMyTasks ? chipActive : chipInactive}`}
+          >
+            {t('myTasks')}
+          </button>
+
+          <Button onClick={() => router.push(`/${locale}/tasks/new`)}>
+            <span className="flex items-center">
+              <PlusIcon className="w-5 h-5 mr-1.5" />
+              {t('createTask')}
+            </span>
+          </Button>
+        </div>
+      </div>
+
+      {/* Tasks Grid */}
+      {loading ? (
+        <div className="text-center py-12">
+          <p className="text-white/50">Cargando...</p>
+        </div>
+      ) : tasks.length === 0 ? (
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-12 text-center">
+          <p className="text-white/70 font-bold mb-2">{t('noTasks')}</p>
+          <p className="text-sm text-white/40 mb-6">
+            {t('noTasksDescription')}
+          </p>
+          <Button onClick={() => router.push(`/${locale}/tasks/new`)}>
+            <span className="flex items-center">
+              <PlusIcon className="w-5 h-5 mr-1.5" />
+              {t('createTask')}
+            </span>
+          </Button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {tasks.map((task) => (
+            <TaskCard key={task.id} task={task} onDelete={handleDelete} />
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
