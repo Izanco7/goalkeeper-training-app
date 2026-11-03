@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import { useAuth } from '@/lib/contexts/AuthContext';
-import { Card } from '@/components/ui/Card';
 import StatsCard from '@/components/dashboard/StatsCard';
 import UpcomingSessions from '@/components/dashboard/UpcomingSessions';
 import RecentActivity from '@/components/dashboard/RecentActivity';
@@ -87,10 +86,10 @@ export default function DashboardPage() {
 
   if (isLoading || !isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-[60vh] flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">{t('common.loading')}</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-400 mx-auto"></div>
+          <p className="mt-4 text-white/50">{t('common.loading')}</p>
         </div>
       </div>
     );
@@ -172,23 +171,23 @@ export default function DashboardPage() {
   return (
     <div>
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
-          {t('auth.welcome')}, {user?.name}
+        <h2 className="text-3xl font-black tracking-tight mb-2">
+          {t('auth.welcome')}, <span className="text-lime-300">{user?.name}</span>
         </h2>
-        <p className="text-gray-600">Panel de control general</p>
+        <p className="text-white/50">Panel de control general</p>
       </div>
 
       {loadingStats ? (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-5 mb-8">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="bg-white rounded-lg shadow-md p-6 animate-pulse">
-              <div className="h-8 bg-gray-200 rounded mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded w-20"></div>
+            <div key={i} className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 animate-pulse">
+              <div className="h-8 bg-white/10 rounded-lg mb-2"></div>
+              <div className="h-4 bg-white/10 rounded w-20"></div>
             </div>
           ))}
         </div>
       ) : dashboardData ? (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-5 mb-8">
           <StatsCard
             title={t('nav.teams')}
             value={dashboardData.totals.teams}
@@ -230,23 +229,23 @@ export default function DashboardPage() {
       )}
 
       <div className="mb-6">
-        <h3 className="text-xl font-bold text-gray-900 mb-4">Modulos de la Aplicacion</h3>
+        <h3 className="text-xl font-extrabold tracking-tight mb-4">Módulos de la aplicación</h3>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {modules.map((module, index) => (
-          <a key={index} href={module.href || '#'} className="block">
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer group h-full">
+          <a key={index} href={module.href || '#'} className="block group">
+            <div className="h-full p-6 rounded-2xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-lime-400/40 hover:-translate-y-1 transition-all duration-300">
               <div className="flex items-start gap-4">
-                <div className="p-3 bg-blue-100 text-blue-600 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <div className="p-3 bg-lime-400/10 border border-lime-400/20 text-lime-300 rounded-xl group-hover:bg-lime-400 group-hover:text-black transition-colors">
                   {module.icon}
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-1">{module.title}</h3>
-                  <p className="text-sm text-gray-600">{module.description}</p>
+                  <h3 className="text-lg font-extrabold tracking-tight mb-1">{module.title}</h3>
+                  <p className="text-sm text-white/45">{module.description}</p>
                 </div>
               </div>
-            </Card>
+            </div>
           </a>
         ))}
       </div>

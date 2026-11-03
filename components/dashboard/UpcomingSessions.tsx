@@ -1,7 +1,7 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { CalendarDaysIcon } from '@heroicons/react/24/outline';
 
 interface UpcomingSession {
   id: number;
@@ -19,8 +19,6 @@ interface UpcomingSessionsProps {
 }
 
 export default function UpcomingSessions({ sessions, locale }: UpcomingSessionsProps) {
-  const t = useTranslations('dashboard');
-
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('es-ES', { 
@@ -43,54 +41,60 @@ export default function UpcomingSessions({ sessions, locale }: UpcomingSessionsP
 
   const getSessionTypeColor = (type: string) => {
     switch (type) {
-      case 'training': return 'bg-blue-100 text-blue-800';
-      case 'match': return 'bg-green-100 text-green-800';
-      case 'recovery': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'training': return 'bg-blue-500/15 text-blue-300 border border-blue-500/30';
+      case 'match': return 'bg-lime-400/15 text-lime-300 border border-lime-400/30';
+      case 'recovery': return 'bg-purple-500/15 text-purple-300 border border-purple-500/30';
+      default: return 'bg-white/10 text-white/60 border border-white/15';
     }
   };
 
   if (sessions.length === 0) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-bold text-gray-800 mb-4">📅 Próximas Sesiones</h2>
-        <p className="text-gray-500 text-center py-8">No hay sesiones programadas</p>
+      <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+        <h2 className="text-xl font-extrabold tracking-tight mb-4 flex items-center gap-2">
+          <CalendarDaysIcon className="w-5 h-5 text-lime-400" />
+          Próximas Sesiones
+        </h2>
+        <p className="text-white/40 text-center py-8">No hay sesiones programadas</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold text-gray-800">📅 Próximas Sesiones</h2>
-        <Link 
+        <h2 className="text-xl font-extrabold tracking-tight flex items-center gap-2">
+          <CalendarDaysIcon className="w-5 h-5 text-lime-400" />
+          Próximas Sesiones
+        </h2>
+        <Link
           href={`/${locale}/sessions`}
-          className="text-sm text-blue-600 hover:text-blue-700"
+          className="text-sm font-bold text-lime-300 hover:text-lime-200 transition-colors"
         >
           Ver todas →
         </Link>
       </div>
-      
+
       <div className="space-y-3">
         {sessions.map((session) => (
-          <Link 
+          <Link
             key={session.id}
             href={`/${locale}/sessions/${session.id}`}
-            className="block p-4 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-all"
+            className="block p-4 rounded-xl border border-white/10 bg-black/30 hover:border-lime-400/40 hover:bg-white/[0.05] transition-all"
           >
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className={`px-2 py-1 rounded text-xs font-medium ${getSessionTypeColor(session.session_type)}`}>
+                  <span className={`px-2 py-1 rounded-lg text-xs font-bold ${getSessionTypeColor(session.session_type)}`}>
                     {session.session_type}
                   </span>
                   {session.team_name && (
-                    <span className="text-sm text-gray-600">🔵 {session.team_name}</span>
+                    <span className="text-sm text-white/50">{session.team_name}</span>
                   )}
                 </div>
-                <div className="flex items-center gap-3 text-sm text-gray-700">
-                  <span className="font-medium">{formatDate(session.session_date)}</span>
-                  <span className="text-gray-400">•</span>
+                <div className="flex items-center gap-3 text-sm text-white/70">
+                  <span className="font-bold text-white">{formatDate(session.session_date)}</span>
+                  <span className="text-white/25">•</span>
                   <span>{formatTimeRange(session.start_time, session.end_time)}</span>
                 </div>
               </div>
