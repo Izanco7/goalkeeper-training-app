@@ -101,20 +101,23 @@ export default function SessionsPage() {
     }
   };
 
+  const selectClass =
+    'bg-black/40 border border-white/10 text-white rounded-xl px-4 py-2 outline-none focus:border-lime-400/60 [&>option]:bg-black';
+
   return (    
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
-        <p className="text-gray-600 mt-2">{t('subtitle')}</p>
+        <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white">{t('title')}</h1>
+        <p className="text-white/50 mt-2">{t('subtitle')}</p>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+      <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
           <select
             value={selectedTeam}
             onChange={(e) => setSelectedTeam(e.target.value)}
-            className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500"
+            className={selectClass}
           >
             <option value="">{t('allTeams')}</option>
             {teams.map((team) => (
@@ -127,7 +130,7 @@ export default function SessionsPage() {
           <select
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value)}
-            className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500"
+            className={selectClass}
           >
             <option value="">{t('allTypes')}</option>
             {types.map((type) => (
@@ -140,7 +143,7 @@ export default function SessionsPage() {
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500"
+            className={selectClass}
           >
             <option value="">{t('allStatuses')}</option>
             {statuses.map((status) => (
@@ -153,7 +156,7 @@ export default function SessionsPage() {
           <select
             value={dateFilter}
             onChange={(e) => setDateFilter(e.target.value as any)}
-            className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500"
+            className={selectClass}
           >
             <option value="all">Todas las fechas</option>
             <option value="upcoming">{t('upcomingSessions')}</option>
@@ -171,12 +174,12 @@ export default function SessionsPage() {
       {/* Sessions Grid */}
       {loading ? (
         <div className="text-center py-12">
-          <p className="text-gray-600">Cargando...</p>
+          <p className="text-white/50">Cargando...</p>
         </div>
       ) : sessions.length === 0 ? (
-        <div className="bg-white rounded-lg shadow-sm p-12 text-center">
-          <p className="text-gray-600 mb-2">{t('noSessions')}</p>
-          <p className="text-sm text-gray-500 mb-6">{t('noSessionsDescription')}</p>
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-12 text-center">
+          <p className="text-white/70 mb-2">{t('noSessions')}</p>
+          <p className="text-sm text-white/50 mb-6">{t('noSessionsDescription')}</p>
           <Button onClick={() => router.push(`/${locale}/sessions/new`)}>
             + {t('createSession')}
           </Button>

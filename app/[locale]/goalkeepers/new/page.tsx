@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Team } from '@/lib/types/database';
@@ -85,29 +86,27 @@ export default function NewGoalkeeperPage() {
         <div className="mb-8">
           <Link
             href={`/${locale}/goalkeepers`}
-            className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 mb-4"
+            className="inline-flex items-center text-sm font-bold text-white/50 hover:text-lime-300 mb-4 transition-colors"
           >
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
+            <ArrowLeftIcon className="w-4 h-4 mr-2" />
             {tc('back')}
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900">{t('createGoalkeeper')}</h1>
-          <p className="mt-1 text-gray-600">{t('subtitle')}</p>
+          <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white">{t('createGoalkeeper')}</h1>
+          <p className="mt-1 text-white/50">{t('subtitle')}</p>
         </div>
 
         {/* Form */}
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-sm text-red-800">{error}</p>
+            <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/30">
+              <p className="text-sm text-red-300">{error}</p>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Información Básica */}
             <div>
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('basicInfo')}</h2>
+              <h2 className="text-lg font-extrabold text-white mb-4">{t('basicInfo')}</h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Input
@@ -134,14 +133,14 @@ export default function NewGoalkeeperPage() {
             {/* Equipo y Número */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-bold text-white/70 mb-2">
                   {t('team')}
                 </label>
                 <select
                   name="team_id"
                   value={formData.team_id}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black"
+                  className="w-full px-3 py-2 rounded-xl bg-black/30 border border-white/15 text-white focus:outline-none focus:border-lime-400/60 focus:ring-2 focus:ring-lime-400/20 [&>option]:bg-zinc-900"
                 >
                   <option value="">{t('selectTeam')}</option>
                   {teams.map(team => (
@@ -163,7 +162,7 @@ export default function NewGoalkeeperPage() {
 
             {/* Estadísticas Físicas */}
             <div>
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('physicalStats')}</h2>
+              <h2 className="text-lg font-extrabold text-white mb-4">{t('physicalStats')}</h2>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <Input
@@ -196,7 +195,7 @@ export default function NewGoalkeeperPage() {
 
             {/* Información Personal */}
             <div>
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('personalInfo')}</h2>
+              <h2 className="text-lg font-extrabold text-white mb-4">{t('personalInfo')}</h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Input
@@ -208,14 +207,14 @@ export default function NewGoalkeeperPage() {
                   placeholder={t('nationalityPlaceholder')}
                 />
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-bold text-white/70 mb-2">
                     {t('dominantHand')}
                   </label>
                   <select
                     name="dominant_hand"
                     value={formData.dominant_hand}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black"
+                    className="w-full px-3 py-2 rounded-xl bg-black/30 border border-white/15 text-white focus:outline-none focus:border-lime-400/60 focus:ring-2 focus:ring-lime-400/20 [&>option]:bg-zinc-900"
                   >
                     <option value="">{t('selectDominantHand')}</option>
                     <option value="left">{t('leftHand')}</option>
@@ -239,7 +238,7 @@ export default function NewGoalkeeperPage() {
 
             {/* Notas */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-bold text-white/70 mb-2">
                 {t('notes')}
               </label>
               <textarea
@@ -247,7 +246,7 @@ export default function NewGoalkeeperPage() {
                 value={formData.notes}
                 onChange={handleChange}
                 rows={4}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black"
+                className="w-full px-3 py-2 rounded-xl bg-black/30 border border-white/15 text-white placeholder-white/30 focus:outline-none focus:border-lime-400/60 focus:ring-2 focus:ring-lime-400/20"
                 placeholder={t('notesPlaceholder')}
               />
             </div>

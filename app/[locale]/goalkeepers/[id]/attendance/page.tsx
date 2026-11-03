@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useParams, useRouter } from 'next/navigation';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { apiGet } from '@/lib/utils/api';
@@ -36,13 +37,13 @@ interface Stats {
 
 const getStatusColor = (status: string): string => {
   const colors: Record<string, string> = {
-    present: 'bg-green-100 text-green-800',
-    absent: 'bg-red-100 text-red-800',
-    late: 'bg-yellow-100 text-yellow-800',
-    injured: 'bg-orange-100 text-orange-800',
-    excused: 'bg-blue-100 text-blue-800'
+    present: 'bg-lime-400/15 text-lime-300 border border-lime-400/30',
+    absent: 'bg-red-500/15 text-red-300 border border-red-500/30',
+    late: 'bg-amber-400/15 text-amber-300 border border-amber-400/30',
+    injured: 'bg-orange-500/15 text-orange-300 border border-orange-500/30',
+    excused: 'bg-sky-400/15 text-sky-300 border border-sky-400/30'
   };
-  return colors[status] || 'bg-gray-100 text-gray-800';
+  return colors[status] || 'bg-white/5 text-white/60 border border-white/10';
 };
 
 export default function GoalkeeperAttendancePage() {
@@ -99,9 +100,9 @@ export default function GoalkeeperAttendancePage() {
 
   if (loading || !goalkeeper) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen py-8">
         <div className="max-w-6xl mx-auto px-4">
-          <p className="text-center text-gray-600">Cargando...</p>
+          <p className="text-center text-white/50">Cargando...</p>
         </div>
       </div>
     );
@@ -117,14 +118,15 @@ export default function GoalkeeperAttendancePage() {
       <Button
         variant="outline"
         onClick={() => router.push(`/${locale}/goalkeepers/${goalkeeperId}`)}
-        className="mb-4"
+        className="mb-4 inline-flex items-center gap-2"
       >
-        ← Volver
+        <ArrowLeftIcon className="w-4 h-4" />
+        Volver
       </Button>
 
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">{t('attendanceHistory')}</h1>
-        <p className="text-gray-600 mt-2">
+        <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white">{t('attendanceHistory')}</h1>
+        <p className="text-white/50 mt-2">
           {goalkeeper.first_name} {goalkeeper.last_name}
         </p>
       </div>
@@ -133,65 +135,65 @@ export default function GoalkeeperAttendancePage() {
       {stats && (
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-6">
           <Card className="text-center p-4">
-            <p className="text-2xl font-bold text-gray-900">{stats.total_sessions}</p>
-            <p className="text-xs text-gray-600">{t('totalSessions')}</p>
+            <p className="text-2xl font-black text-white">{stats.total_sessions}</p>
+            <p className="text-xs text-white/50">{t('totalSessions')}</p>
           </Card>
           <Card className="text-center p-4">
-            <p className="text-2xl font-bold text-green-600">{stats.present_count}</p>
-            <p className="text-xs text-gray-600">{t('presentCount')}</p>
+            <p className="text-2xl font-black text-lime-300">{stats.present_count}</p>
+            <p className="text-xs text-white/50">{t('presentCount')}</p>
           </Card>
           <Card className="text-center p-4">
-            <p className="text-2xl font-bold text-red-600">{stats.absent_count}</p>
-            <p className="text-xs text-gray-600">{t('absentCount')}</p>
+            <p className="text-2xl font-black text-red-400">{stats.absent_count}</p>
+            <p className="text-xs text-white/50">{t('absentCount')}</p>
           </Card>
           <Card className="text-center p-4">
-            <p className="text-2xl font-bold text-yellow-600">{stats.late_count}</p>
-            <p className="text-xs text-gray-600">{t('lateCount')}</p>
+            <p className="text-2xl font-black text-amber-300">{stats.late_count}</p>
+            <p className="text-xs text-white/50">{t('lateCount')}</p>
           </Card>
           <Card className="text-center p-4">
-            <p className="text-2xl font-bold text-orange-600">{stats.injured_count}</p>
-            <p className="text-xs text-gray-600">{t('injuredCount')}</p>
+            <p className="text-2xl font-black text-orange-400">{stats.injured_count}</p>
+            <p className="text-xs text-white/50">{t('injuredCount')}</p>
           </Card>
           <Card className="text-center p-4">
-            <p className="text-2xl font-bold text-blue-600">{stats.excused_count}</p>
-            <p className="text-xs text-gray-600">{t('excusedCount')}</p>
+            <p className="text-2xl font-black text-sky-300">{stats.excused_count}</p>
+            <p className="text-xs text-white/50">{t('excusedCount')}</p>
           </Card>
           <Card className="text-center p-4">
-            <p className="text-2xl font-bold text-purple-600">{stats.attendance_rate}%</p>
-            <p className="text-xs text-gray-600">{t('attendanceRate')}</p>
+            <p className="text-2xl font-black text-lime-300">{stats.attendance_rate}%</p>
+            <p className="text-xs text-white/50">{t('attendanceRate')}</p>
           </Card>
         </div>
       )}
 
       {/* Historial */}
       <Card>
-        <h2 className="text-xl font-semibold mb-4">Historial</h2>
+        <h2 className="text-xl font-extrabold text-white mb-4">Historial</h2>
         {attendances.length === 0 ? (
-          <p className="text-center text-gray-500 py-8">{t('noAttendance')}</p>
+          <p className="text-center text-white/40 py-8">{t('noAttendance')}</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50">
+              <thead>
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('date')}</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('session')}</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('status')}</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('notes')}</th>
+                  <th className="px-4 py-3 text-left text-xs font-bold text-white/40 uppercase tracking-widest">{t('date')}</th>
+                  <th className="px-4 py-3 text-left text-xs font-bold text-white/40 uppercase tracking-widest">{t('session')}</th>
+                  <th className="px-4 py-3 text-left text-xs font-bold text-white/40 uppercase tracking-widest">{t('status')}</th>
+                  <th className="px-4 py-3 text-left text-xs font-bold text-white/40 uppercase tracking-widest">{t('notes')}</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-white/5">
                 {attendances.map((att) => (
-                  <tr key={att.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 text-sm text-gray-900">
+                  <tr key={att.id} className="hover:bg-white/[0.04] transition-colors">
+                    <td className="px-4 py-3 text-sm text-white/80">
                       {att.session_date && formatDate(att.session_date)}
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{att.session_title}</td>
+                    <td className="px-4 py-3 text-sm text-white/80">{att.session_title}</td>
                     <td className="px-4 py-3">
-                      <span className={`text-xs px-2 py-1 rounded-full font-medium ${getStatusColor(att.status)}`}>
+                      <span className={`text-xs px-2 py-1 rounded-full font-bold ${getStatusColor(att.status)}`}>
                         {t(att.status as any)}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-600">{att.notes || '-'}</td>
+                    <td className="px-4 py-3 text-sm text-white/50">{att.notes || '-'}</td>
                   </tr>
                 ))}
               </tbody>

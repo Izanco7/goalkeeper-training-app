@@ -4,13 +4,22 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { apiGet, apiPost } from '@/lib/utils/api';
+import { Input } from '@/components/ui/Input';
+import { Button } from '@/components/ui/Button';
 
 interface Goalkeeper {
   id: number;
   first_name: string;
   last_name: string;
 }
+
+const selectClass =
+  'w-full px-4 py-2.5 bg-black/40 border border-white/10 text-white rounded-xl focus:border-lime-400/60 outline-none transition-all [&>option]:bg-[#0a0f0d]';
+const labelClass = 'block text-sm font-bold text-white/70 mb-2';
+const textareaClass =
+  'w-full px-4 py-2.5 bg-black/40 border border-white/10 text-white placeholder-white/25 rounded-xl focus:ring-2 focus:ring-lime-400/30 focus:border-lime-400/60 outline-none transition-all';
 
 export default function NewMatchPage({ params }: { params: Promise<{ locale: string }> }) {
   const [resolvedParams, setResolvedParams] = useState<{ locale: string } | null>(null);
@@ -87,7 +96,7 @@ export default function NewMatchPage({ params }: { params: Promise<{ locale: str
       if (formData.video_url) data.video_url = formData.video_url;
 
       const match = await apiPost<{ id: number }>('/api/matches', data);
-      
+
       router.push(`/${resolvedParams!.locale}/matches/${match.id}`);
     } catch (error: unknown) {
       setError((error as Error).message || tCommon('errorSaving'));
@@ -100,8 +109,8 @@ export default function NewMatchPage({ params }: { params: Promise<{ locale: str
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">{tCommon('loading')}</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-400 mx-auto"></div>
+          <p className="mt-4 text-white/50">{tCommon('loading')}</p>
         </div>
       </div>
     );
@@ -113,35 +122,36 @@ export default function NewMatchPage({ params }: { params: Promise<{ locale: str
       <div className="mb-8">
         <Link
           href={`/${resolvedParams.locale}/matches`}
-          className="text-blue-600 hover:text-blue-700 mb-4 inline-block"
+          className="inline-flex items-center gap-1.5 text-lime-300 hover:text-lime-200 font-bold mb-4"
         >
-          ← {tCommon('back')}
+          <ArrowLeftIcon className="h-4 w-4" />
+          {tCommon('back')}
         </Link>
-        <h1 className="text-3xl font-bold text-gray-900">{t('newAnalysis')}</h1>
+        <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white">{t('newAnalysis')}</h1>
       </div>
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-            <p className="text-red-800">{error}</p>
+          <div className="bg-red-500/10 border border-red-500/30 rounded-2xl p-4">
+            <p className="text-red-300">{error}</p>
           </div>
         )}
 
         {/* Basic Info */}
-        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-          <h2 className="text-xl font-semibold mb-4">{t('matchDetails')}</h2>
-          
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+          <h2 className="text-xl font-extrabold text-white mb-4">{t('matchDetails')}</h2>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className={labelClass}>
                 {tCommon('goalkeeper')} *
               </label>
               <select
                 required
                 value={formData.goalkeeper_id}
                 onChange={(e) => setFormData({ ...formData, goalkeeper_id: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className={selectClass}
               >
                 <option value="">{tCommon('select')}</option>
                 {goalkeepers.map((gk) => (
@@ -152,173 +162,118 @@ export default function NewMatchPage({ params }: { params: Promise<{ locale: str
               </select>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t('matchDate')} *
-              </label>
-              <input
-                type="date"
-                required
-                value={formData.match_date}
-                onChange={(e) => setFormData({ ...formData, match_date: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
+            <Input
+              label={`${t('matchDate')} *`}
+              type="date"
+              required
+              value={formData.match_date}
+              onChange={(e) => setFormData({ ...formData, match_date: e.target.value })}
+            />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t('opponent')} *
-              </label>
-              <input
-                type="text"
-                required
-                value={formData.opponent}
-                onChange={(e) => setFormData({ ...formData, opponent: e.target.value })}
-                placeholder={t('placeholders.opponent')}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
+            <Input
+              label={`${t('opponent')} *`}
+              type="text"
+              required
+              value={formData.opponent}
+              onChange={(e) => setFormData({ ...formData, opponent: e.target.value })}
+              placeholder={t('placeholders.opponent')}
+            />
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t('competition')}
-              </label>
-              <input
-                type="text"
-                value={formData.competition}
-                onChange={(e) => setFormData({ ...formData, competition: e.target.value })}
-                placeholder={t('placeholders.competition')}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
+            <Input
+              label={t('competition')}
+              type="text"
+              value={formData.competition}
+              onChange={(e) => setFormData({ ...formData, competition: e.target.value })}
+              placeholder={t('placeholders.competition')}
+            />
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t('result')}
-              </label>
-              <input
-                type="text"
-                value={formData.result}
-                onChange={(e) => setFormData({ ...formData, result: e.target.value })}
-                placeholder={t('placeholders.result')}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
+            <Input
+              label={t('result')}
+              type="text"
+              value={formData.result}
+              onChange={(e) => setFormData({ ...formData, result: e.target.value })}
+              placeholder={t('placeholders.result')}
+            />
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t('minutesPlayed')}
-              </label>
-              <input
-                type="number"
-                min="0"
-                max="120"
-                value={formData.minutes_played}
-                onChange={(e) => setFormData({ ...formData, minutes_played: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
+            <Input
+              label={t('minutesPlayed')}
+              type="number"
+              min="0"
+              max="120"
+              value={formData.minutes_played}
+              onChange={(e) => setFormData({ ...formData, minutes_played: e.target.value })}
+            />
           </div>
         </div>
 
         {/* Performance Metrics */}
-        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-          <h2 className="text-xl font-semibold mb-4">{t('metrics')}</h2>
-          
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+          <h2 className="text-xl font-extrabold text-white mb-4">{t('metrics')}</h2>
+
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t('goalsConceded')}
-              </label>
-              <input
-                type="number"
-                min="0"
-                value={formData.goals_conceded}
-                onChange={(e) => setFormData({ ...formData, goals_conceded: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
+            <Input
+              label={t('goalsConceded')}
+              type="number"
+              min="0"
+              value={formData.goals_conceded}
+              onChange={(e) => setFormData({ ...formData, goals_conceded: e.target.value })}
+            />
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t('saves')}
-              </label>
-              <input
-                type="number"
-                min="0"
-                value={formData.saves}
-                onChange={(e) => setFormData({ ...formData, saves: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
+            <Input
+              label={t('saves')}
+              type="number"
+              min="0"
+              value={formData.saves}
+              onChange={(e) => setFormData({ ...formData, saves: e.target.value })}
+            />
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t('highBalls')}
-              </label>
-              <input
-                type="number"
-                min="0"
-                value={formData.high_balls}
-                onChange={(e) => setFormData({ ...formData, high_balls: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
+            <Input
+              label={t('highBalls')}
+              type="number"
+              min="0"
+              value={formData.high_balls}
+              onChange={(e) => setFormData({ ...formData, high_balls: e.target.value })}
+            />
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t('crossesCaught')}
-              </label>
-              <input
-                type="number"
-                min="0"
-                value={formData.crosses_caught}
-                onChange={(e) => setFormData({ ...formData, crosses_caught: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
+            <Input
+              label={t('crossesCaught')}
+              type="number"
+              min="0"
+              value={formData.crosses_caught}
+              onChange={(e) => setFormData({ ...formData, crosses_caught: e.target.value })}
+            />
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t('distributionRate')} (%)
-              </label>
-              <input
-                type="number"
-                min="0"
-                max="100"
-                step="0.1"
-                value={formData.distribution_success_rate}
-                onChange={(e) => setFormData({ ...formData, distribution_success_rate: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
+            <Input
+              label={`${t('distributionRate')} (%)`}
+              type="number"
+              min="0"
+              max="100"
+              step="0.1"
+              value={formData.distribution_success_rate}
+              onChange={(e) => setFormData({ ...formData, distribution_success_rate: e.target.value })}
+            />
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t('rating')} (0-10)
-              </label>
-              <input
-                type="number"
-                min="0"
-                max="10"
-                step="0.1"
-                value={formData.rating}
-                onChange={(e) => setFormData({ ...formData, rating: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
+            <Input
+              label={`${t('rating')} (0-10)`}
+              type="number"
+              min="0"
+              max="10"
+              step="0.1"
+              value={formData.rating}
+              onChange={(e) => setFormData({ ...formData, rating: e.target.value })}
+            />
           </div>
         </div>
 
         {/* Analysis */}
-        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-          <h2 className="text-xl font-semibold mb-4">{t('performance')}</h2>
-          
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+          <h2 className="text-xl font-extrabold text-white mb-4">{t('performance')}</h2>
+
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className={labelClass}>
                 {t('strengths')}
               </label>
               <textarea
@@ -326,12 +281,12 @@ export default function NewMatchPage({ params }: { params: Promise<{ locale: str
                 onChange={(e) => setFormData({ ...formData, strengths: e.target.value })}
                 placeholder={t('placeholders.strengths')}
                 rows={3}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className={textareaClass}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className={labelClass}>
                 {t('areasForImprovement')}
               </label>
               <textarea
@@ -339,12 +294,12 @@ export default function NewMatchPage({ params }: { params: Promise<{ locale: str
                 onChange={(e) => setFormData({ ...formData, areas_for_improvement: e.target.value })}
                 placeholder={t('placeholders.improvements')}
                 rows={3}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className={textareaClass}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className={labelClass}>
                 {t('notes')}
               </label>
               <textarea
@@ -352,37 +307,32 @@ export default function NewMatchPage({ params }: { params: Promise<{ locale: str
                 onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                 placeholder={t('placeholders.notes')}
                 rows={3}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className={textareaClass}
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t('videoUrl')}
-              </label>
-              <input
-                type="url"
-                value={formData.video_url}
-                onChange={(e) => setFormData({ ...formData, video_url: e.target.value })}
-                placeholder={t('placeholders.videoUrl')}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
+            <Input
+              label={t('videoUrl')}
+              type="url"
+              value={formData.video_url}
+              onChange={(e) => setFormData({ ...formData, video_url: e.target.value })}
+              placeholder={t('placeholders.videoUrl')}
+            />
           </div>
         </div>
 
         {/* Actions */}
         <div className="flex gap-4">
-          <button
+          <Button
             type="submit"
             disabled={loading}
-            className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+            className="flex-1"
           >
             {loading ? tCommon('saving') : tCommon('save')}
-          </button>
+          </Button>
           <Link
             href={`/${resolvedParams.locale}/matches`}
-            className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-center"
+            className="px-6 py-3 border border-white/15 text-white/70 hover:border-lime-400/50 hover:text-lime-300 rounded-full font-bold text-center transition-all"
           >
             {tCommon('cancel')}
           </Link>

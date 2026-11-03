@@ -31,11 +31,11 @@ interface Attendance {
 }
 
 const statusColors = {
-  present: 'bg-green-100 border-green-500 text-green-800',
-  absent: 'bg-red-100 border-red-500 text-red-800',
-  late: 'bg-yellow-100 border-yellow-500 text-yellow-800',
-  injured: 'bg-orange-100 border-orange-500 text-orange-800',
-  excused: 'bg-blue-100 border-blue-500 text-blue-800'
+  present: 'bg-lime-400/10 border-lime-400/40 text-lime-300',
+  absent: 'bg-red-500/10 border-red-500/40 text-red-300',
+  late: 'bg-yellow-400/10 border-yellow-400/40 text-yellow-300',
+  injured: 'bg-orange-400/10 border-orange-400/40 text-orange-300',
+  excused: 'bg-sky-400/10 border-sky-400/40 text-sky-300'
 };
 
 export default function SessionAttendancePage() {
@@ -144,12 +144,15 @@ export default function SessionAttendancePage() {
     }
   };
 
+  const selectClass =
+    'w-full bg-black/40 border border-white/10 text-white rounded-xl px-3 py-2 text-sm outline-none focus:border-lime-400/60 [&>option]:bg-black';
+  const inputClass =
+    'w-full bg-black/40 border border-white/10 text-white rounded-xl px-3 py-2 text-sm outline-none focus:border-lime-400/60 placeholder:text-white/30';
+
   if (loading || !session) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-6xl mx-auto px-4">
-          <p className="text-center text-gray-600">Cargando...</p>
-        </div>
+      <div className="py-8">
+        <p className="text-center text-white/50">Cargando...</p>
       </div>
     );
   }
@@ -170,15 +173,15 @@ export default function SessionAttendancePage() {
       </Button>
 
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">{t('takeAttendance')}</h1>
-        <p className="text-gray-600 mt-2">
+        <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white">{t('takeAttendance')}</h1>
+        <p className="text-white/50 mt-2">
           {session.title} - {formatDate(session.session_date)}
         </p>
       </div>
 
       <Card className="mb-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold">{t('quickActions')}</h2>
+          <h2 className="text-xl font-bold text-white">{t('quickActions')}</h2>
           <Button onClick={markAllPresent} variant="outline">
             {t('markAllPresent')}
           </Button>
@@ -194,7 +197,7 @@ export default function SessionAttendancePage() {
             <Card key={goalkeeper.id} className={`border-l-4 ${statusColors[attendance.status]}`}>
               <div className="flex items-center gap-4">
                 {/* Foto */}
-                <div className="w-16 h-16 rounded-full bg-gray-200 flex-shrink-0 overflow-hidden">
+                <div className="w-16 h-16 rounded-full bg-white/10 flex-shrink-0 overflow-hidden">
                   {goalkeeper.photo_url ? (
                     <img
                       src={goalkeeper.photo_url}
@@ -202,7 +205,7 @@ export default function SessionAttendancePage() {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-400">
+                    <div className="w-full h-full flex items-center justify-center text-white/40">
                       <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
                       </svg>
@@ -212,10 +215,10 @@ export default function SessionAttendancePage() {
 
                 {/* Nombre */}
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <h3 className="text-lg font-semibold text-white">
                     {goalkeeper.first_name} {goalkeeper.last_name}
                     {goalkeeper.jersey_number && (
-                      <span className="ml-2 text-gray-500">#{goalkeeper.jersey_number}</span>
+                      <span className="ml-2 text-white/50">#{goalkeeper.jersey_number}</span>
                     )}
                   </h3>
                 </div>
@@ -225,7 +228,7 @@ export default function SessionAttendancePage() {
                   <select
                     value={attendance.status}
                     onChange={(e) => updateAttendance(goalkeeper.id, 'status', e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
+                    className={selectClass}
                   >
                     <option value="present">{t('present')}</option>
                     <option value="absent">{t('absent')}</option>
@@ -242,7 +245,7 @@ export default function SessionAttendancePage() {
                     value={attendance.notes}
                     onChange={(e) => updateAttendance(goalkeeper.id, 'notes', e.target.value)}
                     placeholder={t('notesPlaceholder')}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
+                    className={inputClass}
                   />
                 </div>
               </div>

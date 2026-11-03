@@ -28,9 +28,9 @@ export default function EditorPage() {
   if (isLoading || !isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">{t('common.loading')}</p>
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-8 text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-400 mx-auto"></div>
+          <p className="mt-4 font-bold text-white/50">{t('common.loading')}</p>
         </div>
       </div>
     );
@@ -45,7 +45,7 @@ export default function EditorPage() {
   };
 
   return (
-    <div className="flex flex-col">      
+    <div className="flex flex-col min-h-screen text-white">
       <div className="flex-1">
         <TacticalEditor           
           designId={designId}

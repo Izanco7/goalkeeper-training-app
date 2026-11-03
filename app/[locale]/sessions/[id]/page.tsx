@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { SessionTaskItem } from '@/components/sessions/SessionTaskItem';
 import { DiagramGallery } from '@/components/sessions/DiagramGallery';
+import { PrinterIcon, ClipboardDocumentListIcon } from '@heroicons/react/24/outline';
 import { apiGet, apiDelete, apiPost } from '@/lib/utils/api';
 
 interface Session {
@@ -128,9 +129,14 @@ export default function SessionDetailPage() {
   const handlePrint = () => {
     window.print();
   };
+
+  const selectClass =
+    'bg-black/40 border border-white/10 text-white rounded-xl px-4 py-2 outline-none focus:border-lime-400/60 [&>option]:bg-black';
+  const inputClass =
+    'bg-black/40 border border-white/10 text-white rounded-xl px-4 py-2 outline-none focus:border-lime-400/60 placeholder:text-white/30';
   
   if (loading || !session) {
-    return <div className="min-h-screen bg-gray-50 py-8"><div className="max-w-4xl mx-auto px-4"><p className="text-center text-gray-600">Cargando...</p></div></div>;
+    return <div className="py-8"><p className="text-center text-white/50">Cargando...</p></div>;
   }
 
   const formatDate = (dateString: string) => {
@@ -144,20 +150,18 @@ export default function SessionDetailPage() {
           ← Volver
         </Button>
 
-        <div className="flex items-start justify-between mb-6">
+        <div className="flex items-start justify-between mb-6 flex-wrap gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">{session.title}</h1>
-            <p className="text-gray-600 mt-2">{formatDate(session.session_date)}</p>
+            <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white">{session.title}</h1>
+            <p className="text-white/50 mt-2">{formatDate(session.session_date)}</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             <Button 
               variant="outline" 
               onClick={handlePrint}
               className="print:hidden"
             >
-              <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-              </svg>
+              <PrinterIcon className="w-4 h-4 mr-1" />
               {t('print')}
             </Button>
             <Button 
@@ -165,7 +169,8 @@ export default function SessionDetailPage() {
               onClick={() => router.push(`/${locale}/sessions/${sessionId}/attendance`)}
               className="print:hidden"
             >
-              📋 Asistencia
+              <ClipboardDocumentListIcon className="w-4 h-4 mr-1" />
+              Asistencia
             </Button>
             <Button 
               variant="outline" 
@@ -177,7 +182,7 @@ export default function SessionDetailPage() {
             <Button 
               variant="outline" 
               onClick={handleDelete} 
-              className="text-red-600 hover:bg-red-50 print:hidden"
+              className="border-red-500/40 text-red-300 hover:bg-red-500/10 print:hidden"
             >
               {t('deleteSession')}
             </Button>
@@ -187,34 +192,34 @@ export default function SessionDetailPage() {
         <Card className="mb-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
-              <p className="text-sm text-gray-500">{t('team')}</p>
-              <p className="font-medium">{session.team_name}</p>
+              <p className="text-sm text-white/40">{t('team')}</p>
+              <p className="font-medium text-white">{session.team_name}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">{t('sessionType')}</p>
-              <p className="font-medium">{t(session.session_type as any)}</p>
+              <p className="text-sm text-white/40">{t('sessionType')}</p>
+              <p className="font-medium text-white">{t(session.session_type as any)}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">{t('status')}</p>
-              <p className="font-medium">{t(session.status as any)}</p>
+              <p className="text-sm text-white/40">{t('status')}</p>
+              <p className="font-medium text-white">{t(session.status as any)}</p>
             </div>
             {session.location && (
               <div>
-                <p className="text-sm text-gray-500">{t('location')}</p>
-                <p className="font-medium">{session.location}</p>
+                <p className="text-sm text-white/40">{t('location')}</p>
+                <p className="font-medium text-white">{session.location}</p>
               </div>
             )}
           </div>
           {session.description && (
             <div className="mt-4">
-              <p className="text-sm text-gray-500 mb-1">{t('description')}</p>
-              <p className="text-gray-700">{session.description}</p>
+              <p className="text-sm text-white/40 mb-1">{t('description')}</p>
+              <p className="text-white/80">{session.description}</p>
             </div>
           )}
           {session.notes && (
             <div className="mt-4">
-              <p className="text-sm text-gray-500 mb-1">{t('notes')}</p>
-              <p className="text-gray-700">{session.notes}</p>
+              <p className="text-sm text-white/40 mb-1">{t('notes')}</p>
+              <p className="text-white/80">{session.notes}</p>
             </div>
           )}
         </Card>
@@ -224,17 +229,17 @@ export default function SessionDetailPage() {
 
         <Card>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold">{t('tasks')}</h2>
+            <h2 className="text-xl font-bold text-white">{t('tasks')}</h2>
             <Button onClick={() => setShowAddTask(true)} className="print:hidden">+ {t('addTask')}</Button>
           </div>
 
           {showAddTask && (
-            <div className="bg-gray-50 p-4 rounded-lg mb-4">
+            <div className="bg-white/[0.04] border border-white/10 p-4 rounded-xl mb-4">
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <select
                   value={newTask.task_id}
                   onChange={(e) => setNewTask({ ...newTask, task_id: e.target.value })}
-                  className="border border-gray-300 rounded-lg px-4 py-2"
+                  className={selectClass}
                 >
                   <option value="">{t('selectTask')}</option>
                   {tasks.map((task) => (
@@ -246,12 +251,12 @@ export default function SessionDetailPage() {
                   placeholder={t('taskDuration')}
                   value={newTask.duration}
                   onChange={(e) => setNewTask({ ...newTask, duration: e.target.value })}
-                  className="border border-gray-300 rounded-lg px-4 py-2"
+                  className={inputClass}
                 />
                 <select
                   value={newTask.intensity}
                   onChange={(e) => setNewTask({ ...newTask, intensity: e.target.value })}
-                  className="border border-gray-300 rounded-lg px-4 py-2"
+                  className={selectClass}
                 >
                   <option value="">{t('selectIntensity')}</option>
                   <option value="low">{t('low')}</option>
@@ -263,7 +268,7 @@ export default function SessionDetailPage() {
                   placeholder={t('taskNotes')}
                   value={newTask.notes}
                   onChange={(e) => setNewTask({ ...newTask, notes: e.target.value })}
-                  className="border border-gray-300 rounded-lg px-4 py-2"
+                  className={inputClass}
                 />
               </div>
               <div className="flex gap-2">
@@ -275,7 +280,7 @@ export default function SessionDetailPage() {
 
           <div className="space-y-3">
             {sessionTasks.length === 0 ? (
-              <p className="text-center text-gray-500 py-8">{t('noTasksDescription')}</p>
+              <p className="text-center text-white/50 py-8">{t('noTasksDescription')}</p>
             ) : (
               sessionTasks.map((task) => (
                 <SessionTaskItem key={task.id} task={task} onDelete={handleDeleteTask} />

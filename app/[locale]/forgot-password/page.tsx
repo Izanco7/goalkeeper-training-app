@@ -3,11 +3,15 @@
 import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+
+const inputClass =
+  'w-full px-4 py-3 rounded-xl bg-black/40 border border-white/10 text-white placeholder-white/25 outline-none transition-all focus:border-lime-400/60 focus:ring-2 focus:ring-lime-400/20';
 
 export default function ForgotPasswordPage() {
   const locale = useLocale();
   const t = useTranslations('auth');
-  
+
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
@@ -44,65 +48,75 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-b from-blue-50 to-white py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            {t('forgotPassword')}
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            {t('forgotPasswordDescription')}
-          </p>
-        </div>
+    <div className="min-h-screen flex items-center justify-center bg-[#0a0f0d] text-white p-4 relative overflow-hidden antialiased">
+      {/* glows */}
+      <div aria-hidden className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 h-80 w-[36rem] rounded-full bg-lime-400/10 blur-[110px]" />
+      <div aria-hidden className="pointer-events-none absolute -bottom-32 -right-24 h-72 w-72 rounded-full bg-emerald-500/10 blur-[100px]" />
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-              {t('email')}
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-              placeholder={t('emailPlaceholder')}
-            />
+      <div className="relative w-full max-w-md">
+        <div className="rounded-3xl border border-white/10 bg-white/[0.04] backdrop-blur-xl p-8 shadow-2xl">
+          <div className="text-center mb-8">
+            <div className="flex justify-center mb-5">
+              <div className="w-16 h-16 bg-lime-400 rounded-2xl flex items-center justify-center shadow-[0_0_32px_rgba(163,230,53,0.3)]">
+                <span className="text-black font-black text-2xl tracking-tight">GK</span>
+              </div>
+            </div>
+            <h1 className="text-3xl font-black tracking-tight mb-2">
+              {t('forgotPassword')}
+            </h1>
+            <p className="text-white/50">
+              {t('forgotPasswordDescription')}
+            </p>
           </div>
 
-          {error && (
-            <div className="rounded-md bg-red-50 p-4">
-              <p className="text-sm text-red-800">{error}</p>
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label htmlFor="email" className="block text-sm font-bold text-white/70 mb-1.5">
+                {t('email')}
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={inputClass}
+                placeholder={t('emailPlaceholder')}
+              />
             </div>
-          )}
 
-          {message && (
-            <div className="rounded-md bg-green-50 p-4">
-              <p className="text-sm text-green-800">{message}</p>
-            </div>
-          )}
+            {error && (
+              <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/30">
+                <p className="text-sm font-medium text-red-300">{error}</p>
+              </div>
+            )}
 
-          <div>
+            {message && (
+              <div className="p-3.5 rounded-xl bg-lime-400/10 border border-lime-400/30">
+                <p className="text-sm font-medium text-lime-200">{message}</p>
+              </div>
+            )}
+
             <button
               type="submit"
               disabled={isLoading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
+              className="w-full py-3.5 px-4 rounded-full bg-lime-400 text-black font-extrabold hover:bg-lime-300 transition-all shadow-[0_0_28px_rgba(163,230,53,0.25)] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? t('sending') : t('sendResetLink')}
             </button>
-          </div>
 
-          <div className="text-center space-y-2">
-            <Link
-              href={`/${locale}/login`}
-              className="text-sm font-medium text-blue-600 hover:text-blue-500"
-            >
-              {t('backToLogin')}
-            </Link>
-          </div>
-        </form>
+            <div className="text-center">
+              <Link
+                href={`/${locale}/login`}
+                className="inline-flex items-center gap-1.5 text-sm text-lime-300 hover:text-lime-200 font-bold transition-colors"
+              >
+                <ArrowLeftIcon className="w-4 h-4" />
+                {t('backToLogin')}
+              </Link>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
