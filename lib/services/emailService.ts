@@ -4,7 +4,15 @@ import WelcomeEmail from '../emails/WelcomeEmail';
 import ResetPasswordEmail from '../emails/ResetPasswordEmail';
 import React from 'react';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// El cliente de Resend solo se crea cuando se va a enviar un email de verdad.
+// Así el build en Vercel no explota si RESEND_API_KEY no está configurada.
+function getResend() {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    throw new Error('RESEND_API_KEY no configurada: no se pueden enviar emails.');
+  }
+  return new Resend(apiKey);
+}
 
 const FROM_EMAIL = 'Goalkeeper Training <noreply@igeco.mx>'; // Cambiar a tu dominio verificado
 
@@ -20,7 +28,7 @@ export async function sendWelcomeEmail(
       React.createElement(WelcomeEmail, { name, email: to, verificationUrl })
     );
 
-    const { data, error } = await resend.emails.send({
+    const { data, error } = await getResend().emails.send({
       from: FROM_EMAIL,
       to,
       subject: 'Bienvenido a Goalkeeper Training - Verifica tu cuenta',
@@ -51,7 +59,7 @@ export async function sendPasswordResetEmail(
       React.createElement(ResetPasswordEmail, { name, resetUrl })
     );
 
-    const { data, error } = await resend.emails.send({
+    const { data, error } = await getResend().emails.send({
       from: FROM_EMAIL,
       to,
       subject: 'Restablece tu contraseña - Goalkeeper Training',
